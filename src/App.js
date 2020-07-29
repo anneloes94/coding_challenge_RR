@@ -9,7 +9,7 @@ export default function App() {
   return (
     <div className="App">
       <div id="topnav">
-        <p>Truckers' tasks schedule</p>
+        <p>Task schedule</p>
       </div>
 
 
