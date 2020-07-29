@@ -1,24 +1,18 @@
 import React from 'react';
 import './App.css';
 
-function App() {
+// colour scheme: 
+// https://material.io/resources/color/#!/?view.left=0&view.right=1&secondary.color=2ca675&primary.color=5a7be4&primary.text.color=000000
+// Noto Sans, sans serif
+
+export default function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div id="topnav">
+        <p>Truckers' tasks schedule</p>
+      </div>
+
+
     </div>
   );
 }
-
-export default App;
