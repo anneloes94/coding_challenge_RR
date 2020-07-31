@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 import Header from "./components/Header";
+import Schedule from "./components/Schedule"
 
 // colour scheme:
 // https://material.io/resources/color/#!/?view.left=0&view.right=1&secondary.color=2ca675&primary.color=5a7be4&primary.text.color=000000
@@ -19,6 +20,7 @@ export default function App() {
       </div>
 
       <Header driver={state.driver} week={state.week} />
+      <Schedule />
     </div>
   );
 }

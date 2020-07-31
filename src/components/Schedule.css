@@ -1,0 +1,87 @@
+/* Schedule */
+.schedule {
+  overflow-x: hidden;
+  overflow-y: auto;
+  text-align: center;
+  padding: 0 20px;
+  height: 75vh;
+}
+
+/* Grid - general */
+.grid {
+  padding-top: 20px;
+  display: grid;
+  grid-template-rows:
+    [days] auto
+    [time-0000] 1fr
+    [time-0100] 1fr
+    [time-0200] 1fr
+    [time-0300] 1fr
+    [time-0400] 1fr
+    [time-0500] 1fr
+    [time-0600] 1fr
+    [time-0700] 1fr
+    [time-0800] 1fr
+    [time-0900] 1fr
+    [time-1000] 1fr
+    [time-1100] 1fr
+    [time-1200] 1fr
+    [time-1300] 1fr
+    [time-1400] 1fr
+    [time-1500] 1fr
+    [time-1600] 1fr
+    [time-1700] 1fr
+    [time-1800] 1fr
+    [time-1900] 1fr
+    [time-2000] 1fr
+    [time-2100] 1fr
+    [time-2200] 1fr
+    [time-2300] 1fr;
+  grid-template-columns:
+    [time] 4em
+    [sunday] 1fr
+    [monday] 1fr
+    [tuesday] 1fr
+    [wednesday] 1fr
+    [thursday] 1fr
+    [friday] 1fr
+    [saturday] 1fr;
+}
+
+/* Grid - columns */
+.day-slot {
+  display: none; /* only visible with Grid layout */
+}
+
+@supports( display:grid ) {
+  @media screen and (min-width:700px) {    
+    .day-slot {
+      grid-row: days;
+      display: block;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: rgba(255,255,255,.9);
+    }
+  }
+}
+
+.task {
+  background-color: #2ca675;
+  color: white;
+  padding: 10px 0;
+}
+
+.task:hover {
+  background-color: #007649;
+  color: white;
+}
+
+.task-title {
+  margin-top: 0;
+}
+
+.task-1 {
+  grid-row: time-0800 / time-0900;
+  grid-column: monday;
+}
