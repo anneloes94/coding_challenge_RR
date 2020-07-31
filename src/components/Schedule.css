@@ -1,0 +1,20 @@
+.chart {
+  display: grid;
+  grid-template-rows: repeat(100, 1fr); /* 1 row = 1%! */
+}
+
+.fifty-percent-bar {
+  grid-row: 51 / 101; /* 101 - 51 = 50 => 50% */
+}
+
+.task {
+  background-color: #2ca675;
+  color: white;
+  max-width: 200px;
+  border-radius: 10%;
+}
+
+.task:hover {
+  background-color: #007649;
+  color: white;
+}
