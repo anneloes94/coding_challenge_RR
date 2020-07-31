@@ -6,7 +6,11 @@
   align-items: center;
 }
 
-.download-button {
-  background-color: transparent;
-  color: yellow;
+.header-section {
+  width: 25%;
+}
+
+.downloadCSV {
+  display: flex;
+  align-items: center;
 }

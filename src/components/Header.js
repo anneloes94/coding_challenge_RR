@@ -34,7 +34,7 @@ export default function Header(props) {
 
   return(
     <div id="header">
-      <div className="driver-options" >
+      <div className="header-section driver-options" >
         <FormControl className={classes.formControl}>
           <InputLabel id="demo-simple-select-label">Trucker name</InputLabel>
           <Select
@@ -46,12 +46,13 @@ export default function Header(props) {
         </FormControl>
       </div>
 
-      <div className="weekDisplay">
+      <div className="header-section weekDisplay">
         Week {props.week}
       </div>
 
-      <div className="downloadCSV">
-        <p>Download {props.driver}'s schedule for
+      <div className="header-section downloadCSV">
+        <p class="first">{props.driver}'s schedule per</p>
+        <div class="second">
           <FormControl className={classes.formControl}>
             <InputLabel id="demo-simple-select-label"># of days</InputLabel>
             <Select
@@ -61,10 +62,13 @@ export default function Header(props) {
               {dayPeriodItems}
             </Select>
           </FormControl>
+        </div>
+        <div class="third">
           <Button variant="outlined" color="primary">
             CSV <i class="fa fa-download" aria-hidden="true"></i>
           </Button>
-        </p>
+        </div>
+
       </div>
     </div>
   )
