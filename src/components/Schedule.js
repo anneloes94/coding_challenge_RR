@@ -2,6 +2,24 @@ import React from "react";
 import "./Schedule.css"
 
 export default function Schedule(props) {
+
+  let tasksPerDriver = {
+    John: {
+      week_1: {
+        Sunday: {
+          8: {
+            "task": "dropoff",
+            "end_time": 10
+          },
+          11: {
+            "task": "other",
+            "end_time": 12
+          }
+        }
+      }
+    }
+  }
+
   return(
     <div id="schedule">
       <div class="schedule">
