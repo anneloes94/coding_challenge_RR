@@ -53,7 +53,6 @@ export default function Header(props) {
             id="demo-simple-select"
             // value={props.driver || ""}
             onChange={handleDriverChange}
-            // onChange={console.log("hello")}
           >
             {menuItems}
           </Select>
@@ -61,9 +60,9 @@ export default function Header(props) {
       </div>
 
       <div className="header-section weekDisplay">
-      <button onClick={handleWeekChange("down")}>trashy down button</button>
+      <button onClick={() => handleWeekChange("down")}>\/</button>
         Week {props.week}
-        <button onClick={handleWeekChange("up")}>trashy up button</button>
+        <button onClick={() => handleWeekChange("up")}>/\</button>
       </div>
 
       <div className="header-section downloadCSV">
