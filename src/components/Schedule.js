@@ -3,23 +3,6 @@ import "./Schedule.css"
 
 export default function Schedule(props) {
 
-  let tasksPerDriver = {
-    John: {
-      week_1: {
-        Sunday: {
-          8: {
-            "task": "dropoff",
-            "end_time": 10
-          },
-          11: {
-            "task": "other",
-            "end_time": 12
-          }
-        }
-      }
-    }
-  }
-
   return(
     <div id="schedule">
       <div class="grid">
@@ -41,11 +24,12 @@ export default function Schedule(props) {
           return <span class="day-slot" aria-hidden="true" style={{gridColumn: e, textTransform: "capitalize"}}>{e}</span>
         })}
 
-        <div class="task monday task-1">
-          <h4 class="task-title">Pickup</h4>
+        <div class="task" style={{gridColumn: "sunday", gridRow: "time-0500 / time-0700"}}>
+          <h4 class="task-title">{props.title}</h4>
           <span class="task-time">8:00am - 9:00am</span><br/>
           <span class="task-day">Monday</span>
         </div>
+        
       </div>
 
     </div>

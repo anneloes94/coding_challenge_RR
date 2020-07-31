@@ -66,6 +66,13 @@
   }
 }
 
+/* Grid: rows */
+
+.time-slot {
+  margin-top: 0;
+  margin-right: 10px;
+}
+
 .task {
   background-color: #2ca675;
   color: white;
@@ -79,9 +86,4 @@
 
 .task-title {
   margin-top: 0;
-}
-
-.task-1 {
-  grid-row: time-0800 / time-0900;
-  grid-column: monday;
 }
