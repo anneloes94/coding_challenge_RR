@@ -23,16 +23,24 @@ export default function Schedule(props) {
   return(
     <div id="schedule">
       <div class="grid">
-        <span class="day-slot" aria-hidden="true" style={{gridColumn: "sunday"}}>Sunday</span>
-        <span class="day-slot" aria-hidden="true" style={{gridColumn: "monday"}}>Monday</span>
-        <span class="day-slot" aria-hidden="true" style={{gridColumn: "tuesday"}}>Tuesday</span>
-        <span class="day-slot" aria-hidden="true" style={{gridColumn: "wednesday"}}>Wednesday</span>
-        <span class="day-slot" aria-hidden="true" style={{gridColumn: "thursday"}}>Thursday</span>
-        <span class="day-slot" aria-hidden="true" style={{gridColumn: "friday"}}>Friday</span>
-        <span class="day-slot" aria-hidden="true" style={{gridColumn: "saturday"}}>Saturday</span>
+        
+        {/* ROW HEADERS: TIME */}
+        {/* For an array of 0 to 23 hours, we create a name for each row header */}
+        {[...Array(24)].map((e,i) => {
+          if (i < 10) {
+            i = "0" + i
+          }
+          let gridRowName = "time-"+i+"00"
+          return <h4 class="time-slot" style={{gridRow: gridRowName}}>{i}:00</h4>
+        })}
 
 
-        <h3 class="time-slot">8:00am</h3>
+        {/* COLUMN HEADERS: DAYS */}
+        {/* For an array of Su-Sa, we create a name for each column header: */}
+        {["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"].map((e) => {
+          return <span class="day-slot" aria-hidden="true" style={{gridColumn: e, textTransform: "capitalize"}}>{e}</span>
+        })}
+
         <div class="task monday task-1">
           <h4 class="task-title">Pickup</h4>
           <span class="task-time">8:00am - 9:00am</span><br/>
