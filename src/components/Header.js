@@ -39,8 +39,8 @@ export default function Header(props) {
     }
   }
 
-  const handleDayPeriod = (event) => {
-
+  const handleDayPeriodChange = (event) => {
+    // getCSV(event.target.value)
   }
 
   return(
@@ -66,14 +66,14 @@ export default function Header(props) {
       </div>
 
       <div className="header-section downloadCSV">
-        <p className="first">{props.driver}'s schedule per</p>
+        {props.driver && <p className="first">{props.driver}'s schedule per</p>}
         <div className="second">
           <FormControl className={classes.formControl}>
             <InputLabel id="demo-simple-select-label"># of days</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              onChange={handleDayPeriod}
+              onChange={handleDayPeriodChange}
             >
               {dayPeriodItems}
             </Select>

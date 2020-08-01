@@ -8,29 +8,46 @@ import Schedule from "./components/Schedule"
 
 export default function App() {
 
-  const [week, setWeek] = useState(1)
-  const [driver, setDriver] = useState("")
-  
-  // {
-  //   tasksPerDriver: {
-  //     John: {
-  //       week_1: {
-  //         Sunday: [
-  //           {"1": {
-  //             "task": "Dropoff",
-  //             "start_time": 8,
-  //             "end_time": 10
-  //           }},
-  //           {"2": {
-  //             "task": "Other",
-  //             "start_time": 8,
-  //             "end_time": 12
-  //           }}
-  //         ]
-  //       }
-  //     }
-  //   }
-  // };
+  const [week, setWeek] = useState(1);
+  const [driver, setDriver] = useState("");
+  const [tasks, setTask] = useState([
+    {
+      id: 1,
+      title: "dropoff",
+      trucker: 1,
+      start_time: 1000,
+      end_time: 12000
+
+    },
+    {
+      id: 2,
+      title: "other",
+      trucker: 2,
+      start_time: 1600,
+      end_time: 1800
+    }
+  ])
+  const [days, setDay] = useState([
+    {
+      id: 1,
+      name: "sunday",
+      tasks: [1]
+    }
+  ])
+  const [truckers, setTruckers] = useState([
+    {
+      id: 1,
+      name: "Michael Schumacher"
+    },
+    {
+      id: 2,
+      name: "Lewis Hamilton"
+    },
+    {
+      id: 3,
+      name: "Max Verstappen"
+    }
+  ])
 
   const changeDriver = (newDriver) => {
     setDriver(newDriver)
