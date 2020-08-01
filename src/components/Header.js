@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Header(props) {
-
   const classes = useStyles();
   const drivers = [
     {
@@ -42,7 +41,6 @@ export default function Header(props) {
 
   const handleDriverChange = (event) => {
     let newDriverObject = drivers.filter(driver => driver.id === event.target.value)
-    console.log(newDriverObject[0])
     props.changeDriver(newDriverObject[0])
   }
 
@@ -81,7 +79,7 @@ export default function Header(props) {
       </div>
 
       <div className="header-section downloadCSV">
-        {props.driver && <p className="first">{props.driver.name}'s schedule per</p>}
+        {props.driver.name && <p className="first">{props.driver.name}'s schedule per</p>}
         <div className="second">
           <FormControl className={classes.formControl}>
             <InputLabel id="demo-simple-select-label"># of days</InputLabel>
