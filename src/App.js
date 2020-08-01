@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import Schedule from "./components/Schedule"
+import {  } from "./helpers/selectors"
 
 // colour scheme:
 // https://material.io/resources/color/#!/?view.left=0&view.right=1&secondary.color=2ca675&primary.color=5a7be4&primary.text.color=000000
@@ -34,7 +35,7 @@ export default function App() {
       tasks: [1]
     }
   ])
-  const [truckers, setTruckers] = useState([
+  const [drivers, setDrivers] = useState([
     {
       id: 1,
       name: "Michael Schumacher"
