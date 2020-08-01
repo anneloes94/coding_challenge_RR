@@ -4,18 +4,16 @@ import Header from "./components/Header";
 import Schedule from "./components/Schedule"
 import {  } from "./helpers/selectors"
 
-// colour scheme:
-// https://material.io/resources/color/#!/?view.left=0&view.right=1&secondary.color=2ca675&primary.color=5a7be4&primary.text.color=000000
-
 export default function App() {
 
+  // STATE
   const [week, setWeek] = useState(1);
-  const [driver, setDriver] = useState("");
+  const [driver, setDriver] = useState({});
   const [tasks, setTask] = useState([
     {
       id: 1,
       title: "dropoff",
-      trucker: 1,
+      driver: 1,
       start_time: 1000,
       end_time: 12000
 
@@ -23,7 +21,7 @@ export default function App() {
     {
       id: 2,
       title: "other",
-      trucker: 2,
+      driver: 2,
       start_time: 1600,
       end_time: 1800
     }
@@ -35,20 +33,9 @@ export default function App() {
       tasks: [1]
     }
   ])
-  const [drivers, setDrivers] = useState([
-    {
-      id: 1,
-      name: "Michael Schumacher"
-    },
-    {
-      id: 2,
-      name: "Lewis Hamilton"
-    },
-    {
-      id: 3,
-      name: "Max Verstappen"
-    }
-  ])
+
+
+  // FUNCTIONS
 
   const changeDriver = (newDriver) => {
     setDriver(newDriver)
@@ -57,6 +44,8 @@ export default function App() {
   const changeWeek = (newWeek) => {
     setWeek(newWeek)
   }
+
+  // RENDERING
 
   return (
     <div className="App">

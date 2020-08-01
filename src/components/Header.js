@@ -23,12 +23,27 @@ const useStyles = makeStyles((theme) => ({
 export default function Header(props) {
 
   const classes = useStyles();
-  const drivers = ["Michael Schumacher", "Michael Hamilton", "Max Verstappen"]
-  const menuItems = drivers.map((driver, index) => <MenuItem key={index} value={driver}>{driver}</MenuItem>)
+  const drivers = [
+    {
+      id: 1,
+      name: "Michael Schumacher"
+    },
+    {
+      id: 2,
+      name: "Lewis Hamilton"
+    },
+    {
+      id: 3,
+      name: "Max Verstappen"
+    }
+  ]
+  const menuItems = drivers.map((driver, index) => <MenuItem key={index} value={driver.id}>{driver.name}</MenuItem>)
   const dayPeriodItems = [2, 4, 7, 14, 28].map((driver, index) => <MenuItem key={index} value={driver}>{driver} days</MenuItem>)
 
   const handleDriverChange = (event) => {
-    props.changeDriver(event.target.value)
+    let newDriverObject = drivers.filter(driver => driver.id === event.target.value)
+    console.log(newDriverObject[0])
+    props.changeDriver(newDriverObject[0])
   }
 
   const handleWeekChange = (input) => {
@@ -66,7 +81,7 @@ export default function Header(props) {
       </div>
 
       <div className="header-section downloadCSV">
-        {props.driver && <p className="first">{props.driver}'s schedule per</p>}
+        {props.driver && <p className="first">{props.driver.name}'s schedule per</p>}
         <div className="second">
           <FormControl className={classes.formControl}>
             <InputLabel id="demo-simple-select-label"># of days</InputLabel>

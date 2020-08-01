@@ -1,24 +1,20 @@
-// in APP, we have access to:
-  // "drivers"
-  // "driver" (current driver)
-  // "week" (selected)
-  // "days" (with tasks per day)
-  // "tasks" (task details, including driver)
+function filterDaysByWeek(week, days) {
+  // 1a. Get current week as a range of days
+  //    IN: week  - OUT: firstDay, lastDay
+  const firstDay = week * 7 - 6
+  const lastDay = week * 7
 
+  // 1b. Filter days for this range of days
+  //    IN: days, firstDay, lastDay   - OUT: days
+  const filteredDays = days.filter(day => day.id >= firstDay && day.id <= lastDay)
+  return filteredDays
+}
 
-// STEPS
+function filterTasksByDriver(driver, tasks) {
+  // 2. Filter tasks for driver
+  //    IN: tasks, driver_id  - OUT: tasks
+  const filteredTasks = tasks.filter(task => task.driver === driver.id)
+  return filteredTasks
+}
 
-// 1a. Get current week as a range of days
-//    IN: week  - OUT: firstDay, lastDay
-
-// 1b. Filter days for currentWeekDays
-//    IN: days, firstDay, lastDay   - OUT: days
-
-// 2a. Get current driver id (driver -> id --> filter for tasks )
-//    IN: driver, drivers   - OUT: driver_id
-
-// 2b. Filter tasks for driver
-//    IN: tasks, driver_id  - OUT: tasks
-
-
-// 3. pass days and tasks to child component
+export {filterDaysByWeek, filterTasksByDriver}
