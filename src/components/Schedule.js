@@ -24,11 +24,32 @@ export default function Schedule(props) {
           return <span key={i} className="day-slot" aria-hidden="true" style={{gridColumn: e, textTransform: "capitalize"}}>{e}</span>
         })}
 
-        <div className="task" style={{gridColumn: "sunday", gridRow: "time-0500 / time-0700"}}>
-          <h4 className="task-title">{props.title}</h4>
+        {/* TASKS */}
+        {/* Assign every task to a cell in the grid: */}
+        {props.tasks && props.days && props.days.map((day) => {
+          let dayName = day.name;
+          console.log("prop tasks: ", props.tasks)
+          props.tasks.map((task, index) => {
+            let timePhrase = "time-" + task.start_time + " / time-" + task.end_time;
+            // console.log("Day name: ", dayName)
+            // console.log("timePhrase", timePhrase)
+            return(
+              // <div key={index} className="task" style={{gridColumn: dayName, gridRow: timePhrase}}>
+              //   <h4 className="task-title">{props.title}</h4>
+              //   <span className="task-time">8:00am - 9:00am</span><br/>
+              //   <span className="task-day" style={{textTransform: "capitalize"}}>{dayName}</span>
+              // </div>
+              <div>
+                hello world
+              </div>
+            )
+          })
+        })}
+        {/* <div className="task" style={{gridColumn: "sunday", gridRow: "time-0500 / time-0700"}}>
+          <h4 className="task-title">Dropoff</h4>
           <span className="task-time">8:00am - 9:00am</span><br/>
-          <span className="task-day">Monday</span>
-        </div>
+          <span className="task-day" style={{textTransform: "capitalize"}}>Monday</span>
+        </div> */}
         
       </div>
 
