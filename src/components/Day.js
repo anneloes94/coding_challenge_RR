@@ -4,7 +4,6 @@ import Task from "./Task"
 export default function Day(props) {
   const tasks = props.tasks.map((task, index) => {
     let timePhrase = "time-" + task.start_time + " / time-" + task.end_time;
-    console.log("hello")
     return(
       <Task
         index={index}
@@ -16,8 +15,8 @@ export default function Day(props) {
   })
     
   return(
-    <div>
-      {tasks.map(task => <div>{task}</div>)}
-    </div>
+    <>
+      {tasks}
+    </>
   )
 }

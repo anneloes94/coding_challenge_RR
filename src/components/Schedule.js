@@ -27,7 +27,8 @@ export default function Schedule(props) {
 
         {/* DAYS/TASKS */}
         {/* For every day in days state, assign a Day component: */}
-        {props.days.map(day => {
+        {props.tasks && props.days.map(day => {
+          console.log(props.tasks)
           return(
             day.name && 
             <Day
@@ -35,16 +36,8 @@ export default function Schedule(props) {
               dayName={day.name}
             />
           )
-        })}
-
-        <div className="task" style={{gridColumn: "sunday", gridRow: "time-0500 / time-0700"}}>
-          <h4 className="task-title">Dropoff (hardcoded)</h4>
-          <span className="task-time">8:00am - 9:00am</span><br/>
-          <span className="task-day" style={{textTransform: "capitalize"}}>Monday</span>
-        </div>
-        
+        })}        
       </div>
-
     </div>
   )
 }
