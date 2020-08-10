@@ -9,7 +9,7 @@ export default function Schedule(props) {
       <div className="grid">
         
         {/* ROW HEADER: TIME */}
-        {/* For an array of 0 to 23 hours, we create a name for each row header */}
+        {/* For an array of 0 to 23 hours, we create a name for each row header in the calendar grid */}
         {[...Array(24)].map((e,i) => {
           if (i < 10) {
             i = "0" + i
@@ -20,26 +20,24 @@ export default function Schedule(props) {
 
 
         {/* COLUMN HEADER: DAYS */}
-        {/* For an array of Su-Sa, we create a name for each column header: */}
+        {/* For an array of Su-Sa, we create a name for each column header in the calendar grid */}
         {["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"].map((e, i) => {
           return <span key={i} className="day-slot" aria-hidden="true" style={{gridColumn: e, textTransform: "capitalize"}}>{e}</span>
         })}
 
         {/* DAYS/TASKS */}
-        {/* Assign every task to a day in the grid: */}
-        <Day
-          tasks={props.tasks}
-          days={props.days}
-        />
-
-        <div className="task" style={{gridColumn: "sunday", gridRow: "time-0500 / time-0700"}}>
-          <h4 className="task-title">Dropoff (hardcoded)</h4>
-          <span className="task-time">8:00am - 9:00am</span><br/>
-          <span className="task-day" style={{textTransform: "capitalize"}}>Monday</span>
-        </div>
-        
+        {/* For every day in days state, assign a Day component: */}
+        {props.tasks && props.days.map(day => {
+          console.log(props.tasks)
+          return(
+            day.name && 
+            <Day
+              tasks={props.tasks}
+              dayName={day.name}
+            />
+          )
+        })}        
       </div>
-
     </div>
   )
 }
