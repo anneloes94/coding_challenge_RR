@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import Schedule from "./components/Schedule"
@@ -41,12 +41,12 @@ export default function App() {
     },
     {
       id: 5,
-      day: "thursday",
+      name: "thursday",
       tasks: [2]
     },
     {
       id: 13,
-      day: "friday",
+      name: "friday",
       tasks: [3]
     }
   ])
