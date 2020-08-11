@@ -14,3 +14,16 @@
   display: flex;
   align-items: center;
 }
+
+.weekDisplay {
+  font-size: 22px;
+}
+
+.weekDisplay button {
+  background-color: transparent;
+  border: none;
+  cursor:pointer;
+  padding:16px 20px;
+  font-size: 22px;
+  color: #5a7be4;
+}
