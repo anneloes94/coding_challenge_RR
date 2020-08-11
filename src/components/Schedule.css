@@ -98,7 +98,6 @@
 	cursor:pointer;
 	color:#ffffff;
 	font-size:28px;
-	font-weight:bold;
 	padding:10px 16px;
   text-decoration:none;
   position: fixed;
@@ -112,4 +111,27 @@
 .add-task:active {
 	position:relative;
 	top:1px;
+}
+
+.add-task span {
+  visibility: hidden;
+  font-size: 12px;
+  width: 120px;
+  background-color: rgba(216, 216, 216, 0.5);
+  color: black;
+  text-align: center;
+  border-radius: 5px;
+  padding: 10px 0;
+  max-width: 100px;
+  
+  /* Position of tooltip */
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  margin-left: -60px;
+  margin-bottom: 20px;
+}
+
+.add-task:hover span {
+  visibility: visible;
 }
