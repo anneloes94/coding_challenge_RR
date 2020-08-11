@@ -51,15 +51,6 @@ export default function App() {
     }
   ])
 
-  // Variables dependent on state
-  // let filteredDays;
-  // let filteredTasks;
-
-  // useEffect(() => {
-  //   filteredDays = filterDaysByWeek(week, days)
-  //   filteredTasks = filterTasksByDriver(driver, tasks)
-  // }, [week, driver])
-
   // FUNCTIONS
 
   const changeDriver = (newDriver) => {
