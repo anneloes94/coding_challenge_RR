@@ -73,9 +73,15 @@ export default function Header(props) {
       </div>
 
       <div className="header-section weekDisplay">
+        <div>
         {props.week !== 1 && <button className="week-button" onClick={() => handleWeekChange("down")}><i className="fas fa-angle-left"></i></button>}
+        </div>
+        <div>
           Week {props.week}
+        </div>
+        <div>
         {props.week !== 52 && <button className="week-button" onClick={() => handleWeekChange("up")}><i className="fas fa-angle-right"></i></button>}
+        </div>
       </div>
 
       <div className="header-section downloadCSV">
