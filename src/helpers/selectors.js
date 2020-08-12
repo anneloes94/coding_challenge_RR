@@ -7,7 +7,6 @@ function filterDaysByWeek(week, days) {
   // 1b. Filter days for this range of days
   //    IN: days, firstDay, lastDay   - OUT: days
   const filteredDays = days.filter(day => day.id >= firstDay && day.id <= lastDay)
-  console.log("DA^S", filteredDays)
   return filteredDays
 }
 

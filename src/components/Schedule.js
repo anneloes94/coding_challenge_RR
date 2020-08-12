@@ -4,6 +4,10 @@ import Day from "./Day"
 
 export default function Schedule(props) {
 
+  function displayAddTask () {
+    alert("hello")
+  }
+
   return(
     <div id="schedule">
       <div className="grid">
@@ -27,17 +31,21 @@ export default function Schedule(props) {
 
         {/* DAYS/TASKS */}
         {/* For every day in days state, assign a Day component: */}
-        {props.tasks && props.days.map(day => {
-          console.log(props.tasks)
+        {props.days.map(day => {
           return(
             day.name && 
             <Day
               tasks={props.tasks}
+              day={day}
               dayName={day.name}
             />
           )
         })}        
       </div>
+      <button onClick={displayAddTask} className="add-task" >
+        <i className="fa fa-plus" aria-hidden="true"></i>
+        <span>Add a task</span>
+      </button>
     </div>
   )
 }

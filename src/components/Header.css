@@ -1,16 +1,43 @@
 #header {
   background-color: #E1E2E1;
-  min-height: 5em;
+  min-height: 80px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 5px 50px;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
 }
 
 .header-section {
   width: 30%;
 }
 
+.driver-options {
+  display: flex;
+  justify-content: left;
+}
+
 .downloadCSV {
   display: flex;
   align-items: center;
+  justify-content: right;
+}
+
+.weekDisplay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.weekDisplay button {
+  background-color: transparent;
+  border: none;
+  cursor:pointer;
+  padding:16px 20px;
+  font-size: 22px;
+  font-weight: 800;
+  color: #5a7be4;
 }

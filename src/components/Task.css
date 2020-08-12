@@ -1,0 +1,19 @@
+.task {
+  background-color: #2ca675;
+  color: white;
+  padding: 10px 0;
+  border-radius: 5px;
+}
+
+.task:hover {
+  background-color: #007649;
+  color: white;
+}
+
+.task-title {
+  margin-top: 0;
+}
+
+.action-buttons {
+  position: absolute;
+}
