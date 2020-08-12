@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Schedule.css"
 import Day from "./Day"
+import PopUpForm from "./PopUpForm"
 
 export default function Schedule(props) {
 
+  const [showForm, setShowForm] = useState(false);
+
   function displayAddTask () {
-    alert("hello")
+    setShowForm(!showForm)
   }
 
   return(
@@ -46,6 +49,13 @@ export default function Schedule(props) {
         <i className="fa fa-plus" aria-hidden="true"></i>
         <span>Add a task</span>
       </button>
+      
+      {showForm &&
+        <PopUpForm
+          driver={props.driver}
+        />
+      }
+
     </div>
   )
 }

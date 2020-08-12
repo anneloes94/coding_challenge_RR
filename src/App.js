@@ -80,6 +80,7 @@ export default function App() {
 
       {driver && 
       <Schedule 
+        driver={driver}
         tasks={filterTasksByDriver(driver, tasks)}
         days={filterDaysByWeek(week, days)}
       />}
