@@ -1,8 +1,12 @@
 function convertToClockTime(time) {
-  // convert 0800 to "8:00am"
-  let newTime = time
+  // convert "0800" to "8:00am"
+  let newTime = Number(time)
   let periodString = "am";
   let numberString;
+
+  if (time === "0000") {
+    return "0:00am"
+  }
 
   // If the time is between 12:00 - 24:00, periodString becomes "pm"
   if (newTime > 1100 && newTime < 2400) {

@@ -9,10 +9,12 @@ import { convertToClockTime } from "../helpers/convertors";
 
 // Options for task type
 const tasks = ["pickup", "dropoff", "other"]
+
 // Creates time array: [0000, ..., 2300]
+  // #TODO => refactor  
 let times = [];
 const createTimes = () => {
-  [...Array(24)].map((e,i) => {
+  [...Array(25)].map((e,i) => {
     let time;
     if (i < 10) {
       time = "0" + i;
@@ -65,8 +67,15 @@ export default function PopUpForm(props) {
     setEndTime(event.target.value);
   };
 
-  const submitForm = () => {
-    // check 
+  const checkFormData = () => {
+    // check whether week is <53
+    // convert week/weekday to day
+    // check whether time is available
+    // submitFormData()
+  }
+  
+  const submitFormData = () => {
+    // alter state (setTask(), setDay()) with data
   }
 
   return (
@@ -129,7 +138,7 @@ export default function PopUpForm(props) {
                 value={startTime}
                 onChange={handleStartingTimeChange}
               >
-                {times.map(time => (
+                {times.slice(0, -1).map(time => (
                   <MenuItem key={time} value={time} >
                     {convertToClockTime(time)}
                   </MenuItem>
@@ -151,7 +160,7 @@ export default function PopUpForm(props) {
                 ))}
               </TextField>
             </div>
-            <button onSubmit={submitForm}>Create Task</button>
+            <button onSubmit={checkFormData}>Create Task</button>
           </form>
         
         </div>

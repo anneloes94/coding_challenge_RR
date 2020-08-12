@@ -17,7 +17,7 @@ export default function Schedule(props) {
         
         {/* ROW HEADER: TIME */}
         {/* For an array of 0 to 23 hours, we create a name for each row header in the calendar grid */}
-        {[...Array(24)].map((e,i) => {
+        {[...Array(25)].map((e,i) => {
           if (i < 10) {
             i = "0" + i
           }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { InputLabel, MenuItem, FormControl, Select, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles'
@@ -38,10 +38,12 @@ export default function Header(props) {
   ]
   const menuItems = drivers.map((driver, index) => <MenuItem key={index} value={driver.id}>{driver.name}</MenuItem>)
   const dayPeriodItems = [2, 4, 7, 14, 28].map((driver, index) => <MenuItem key={index} value={driver}>{driver} days</MenuItem>)
+  const [hasNoEntry, setEntry] = useState(true)
 
   const handleDriverChange = (event) => {
     let newDriverObject = drivers.filter(driver => driver.id === event.target.value)
     props.changeDriver(newDriverObject[0])
+    setEntry(false)
   }
 
   const handleWeekChange = (input) => {
@@ -62,6 +64,7 @@ export default function Header(props) {
         <FormControl className={classes.formControl}>
           <InputLabel id="demo-simple-select-label">Trucker name</InputLabel>
           <Select
+            error={hasNoEntry}
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             // value={props.driver || ""}
