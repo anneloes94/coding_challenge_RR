@@ -4,6 +4,10 @@ import Day from "./Day"
 
 export default function Schedule(props) {
 
+  function displayAddTask () {
+    alert("hello")
+  }
+
   return(
     <div id="schedule">
       <div className="grid">
@@ -38,7 +42,7 @@ export default function Schedule(props) {
           )
         })}        
       </div>
-      <button className="add-task">
+      <button onClick={() => alert("hello")} className="add-task" >
         <i className="fa fa-plus" aria-hidden="true"></i>
         <span>Add a task</span>
       </button>
