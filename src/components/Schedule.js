@@ -55,6 +55,8 @@ export default function Schedule(props) {
           driver={props.driver}
           open={showForm}
           handleClose={displayAddTask}
+          week={props.week}
+          setWeek={(week) => props.setWeek(week)}
         />
       }
 

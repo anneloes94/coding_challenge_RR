@@ -83,6 +83,10 @@ export default function App() {
         driver={driver}
         tasks={filterTasksByDriver(driver, tasks)}
         days={filterDaysByWeek(week, days)}
+        week={week}
+        setTask={setTask}
+        setDay={setDay}
+        setWeek={setWeek}
       />}
     </div>
   );
