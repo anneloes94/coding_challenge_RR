@@ -1,10 +1,13 @@
 #header {
   background-color: #E1E2E1;
-  min-height: 5em;
+  min-height: 80px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 5px 50px;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
 }
 
 .header-section {

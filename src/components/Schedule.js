@@ -42,7 +42,7 @@ export default function Schedule(props) {
           )
         })}        
       </div>
-      <button onClick={() => alert("hello")} className="add-task" >
+      <button onClick={displayAddTask} className="add-task" >
         <i className="fa fa-plus" aria-hidden="true"></i>
         <span>Add a task</span>
       </button>
