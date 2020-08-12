@@ -53,6 +53,8 @@ export default function Schedule(props) {
       {showForm &&
         <PopUpForm
           driver={props.driver}
+          open={showForm}
+          handleClose={displayAddTask}
         />
       }
 
