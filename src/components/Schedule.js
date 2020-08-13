@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Schedule.css"
 import Day from "./Day"
+import PopUpForm from "./PopUpForm"
 
 export default function Schedule(props) {
 
+  const [showForm, setShowForm] = useState(false);
+
   function displayAddTask () {
-    alert("hello")
+    setShowForm(!showForm)
   }
 
   return(
@@ -14,7 +17,7 @@ export default function Schedule(props) {
         
         {/* ROW HEADER: TIME */}
         {/* For an array of 0 to 23 hours, we create a name for each row header in the calendar grid */}
-        {[...Array(24)].map((e,i) => {
+        {[...Array(25)].map((e,i) => {
           if (i < 10) {
             i = "0" + i
           }
@@ -31,11 +34,12 @@ export default function Schedule(props) {
 
         {/* DAYS/TASKS */}
         {/* For every day in days state, assign a Day component: */}
+        {/* We filter tasks by the day they belong to */}
         {props.days.map(day => {
           return(
             day.name && 
             <Day
-              tasks={props.tasks}
+              tasks={props.tasks.filter(task => day.tasks.includes(task.id) )}
               day={day}
               dayName={day.name}
             />
@@ -46,6 +50,22 @@ export default function Schedule(props) {
         <i className="fa fa-plus" aria-hidden="true"></i>
         <span>Add a task</span>
       </button>
+      
+      {showForm &&
+        <PopUpForm
+          driver={props.driver}
+          open={showForm}
+          handleClose={displayAddTask}
+          week={props.week}
+          setStateWeek={(week) => props.setWeek(week)}
+          mode={"Add"}
+          handleTasksState={(task) => props.handleTasksState(task)}
+          handleDaysState={(day) => props.handleDaysState(day)}
+          allTasks={props.tasks}
+          allDays={props.days}
+        />
+      }
+
     </div>
   )
 }

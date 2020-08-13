@@ -14,23 +14,23 @@ export default function App() {
       id: 1,
       title: "dropoff",
       driver: 1,
-      start_time: 1000,
-      end_time: 1200
+      start_time: "1000",
+      end_time: "1200"
 
     },
     {
       id: 2,
       title: "other",
       driver: 3,
-      start_time: 1600,
-      end_time: 1800
+      start_time: "1600",
+      end_time: "1800"
     },
     {
       id: 3,
       title: "pickup",
       driver: 2,
-      start_time: 1500,
-      end_time: 1600
+      start_time: "1500",
+      end_time: "1600"
     }
   ])
   const [days, setDay] = useState([
@@ -80,8 +80,13 @@ export default function App() {
 
       {driver && 
       <Schedule 
+        driver={driver}
         tasks={filterTasksByDriver(driver, tasks)}
         days={filterDaysByWeek(week, days)}
+        week={week}
+        handleTasksState={(task) => setTask([...tasks, task])}
+        handleDaysState={(day) => setDay([...days, day])}
+        setWeek={setWeek}
       />}
     </div>
   );
