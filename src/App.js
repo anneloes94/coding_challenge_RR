@@ -84,8 +84,8 @@ export default function App() {
         tasks={filterTasksByDriver(driver, tasks)}
         days={filterDaysByWeek(week, days)}
         week={week}
-        setTask={setTask}
-        setDay={setDay}
+        handleTasksState={(task) => setTask([...tasks, task])}
+        handleDaysState={(day) => setDay([...days, day])}
         setWeek={setWeek}
       />}
     </div>

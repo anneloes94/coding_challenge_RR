@@ -11,6 +11,7 @@ import { convertToClockTime } from "../helpers/convertors";
 import "./PopUpForm.css"
 
 // Options for task type
+  //  #TODO => refactor into global variable
 const tasks = ["pickup", "dropoff", "other"]
 const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
 
@@ -62,6 +63,7 @@ export default function PopUpForm(props) {
   const [endTime, setEndTime] = useState("1300");
   const [day, setDay] = useState(days[0])
   const [errors, setError] = useState([])
+  const [warning, showWarning] = useState(false)
 
   // If the week is incorrect, add error to errors state (if not there already)
   // Otherwise, remove error from errors and change the state of week to current value
@@ -70,7 +72,7 @@ export default function PopUpForm(props) {
       !errors.includes("invalidWeek") && setError(errors => [...errors, "invalidWeek"])
     } else {
       setError(errors.filter(error => error !== "invalidWeek"))
-      props.setWeek(event.target.value)
+      props.setStateWeek(event.target.value)
     }
   }
 
@@ -96,19 +98,49 @@ export default function PopUpForm(props) {
   };
 
   const checkFormData = () => {
-    // check whether no errors and driver
+    // check whether there are no errors in form and driver is set
     if (errors.length === 0 && props.driver.name) {
-      console.log("yay!")
+      showWarning(false)
+      
+      // convert week/weekday to dayNumber (for days state)
+      const dayInWeek = days.indexOf(day) + 1
+      const formDayNumber = (props.week - 1) * 7 + dayInWeek
+      
+      // we now have all variables - call submitFormData
+      submitFormData(props.driver.id, day, formDayNumber, task, startTime, endTime)
     } else {
-      console.log("boooo")
+      console.log("booo")
+      showWarning(true)
     }
-    // convert week/weekday to day
-    // check whether time is available
-    // submitFormData()
   }
   
-  const submitFormData = () => {
-    // alter state (setTask(), setDay()) with data
+  const submitFormData = (driverID, dayName, dayNumber, taskName, startTime, endTime) => {
+    let lastTask = props.allTasks[props.allTasks.length - 1];
+    let newTaskID = lastTask.id + 1
+    // check if days state already has this day (dayNumber) stored
+    props.allDays.map(day => {
+      if (day.id !== dayNumber) {
+        props.handleDaysState({
+          id: dayNumber,
+          name: dayName,
+          tasks: [newTaskID]
+        });
+        props.handleTasksState({
+          id: newTaskID,
+          title: taskName,
+          driver: driverID,
+          start_time: startTime,
+          end_time: endTime
+        });
+      }
+    })
+    
+    // else: add new day and add task
+    
+    // if so, check if time of current task has conflict with any task in tasks array of day
+      // if not: great, add it to day (setDay) and add task (setTask)
+
+      // if so: too bad, give a warning
   }
 
   return (
@@ -126,6 +158,11 @@ export default function PopUpForm(props) {
     >
       <Fade in={props.open}>
         <div className={classes.paper} id="form" >
+          {warning && 
+            <div class="warning">
+              <span>Please review your entry below</span>
+            </div>
+          }
           <form className={classes.root} noValidate autoComplete="off">
             <h2 className="form-element" >{props.mode} a task</h2>
             <div>
@@ -214,7 +251,7 @@ export default function PopUpForm(props) {
                 ))}
               </TextField>
               <div className="button-wrapper">
-                <Button onSubmit={checkFormData} variant="outlined" color="primary">
+                <Button onClick={checkFormData} variant="outlined" color="primary">
                   {props.mode} Task
                 </Button>
               </div>

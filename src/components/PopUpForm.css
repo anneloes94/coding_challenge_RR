@@ -5,3 +5,15 @@
 #form button {
   margin-top: 20px;
 }
+
+.warning {
+  margin-top: 20px;
+  color: #f44336;
+  text-align: center;
+  border-bottom: 1px solid #f44336;
+}
+
+div.warning {
+  padding-bottom: 10px;
+  
+}

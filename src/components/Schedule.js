@@ -56,8 +56,12 @@ export default function Schedule(props) {
           open={showForm}
           handleClose={displayAddTask}
           week={props.week}
-          setWeek={(week) => props.setWeek(week)}
+          setStateWeek={(week) => props.setWeek(week)}
           mode={"Add"}
+          handleTasksState={(task) => props.handleTasksState(task)}
+          handleDaysState={(day) => props.handleDaysState(day)}
+          allTasks={props.tasks}
+          allDays={props.days}
         />
       }
 
