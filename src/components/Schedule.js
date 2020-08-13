@@ -57,6 +57,7 @@ export default function Schedule(props) {
           handleClose={displayAddTask}
           week={props.week}
           setWeek={(week) => props.setWeek(week)}
+          mode={"Add"}
         />
       }
 

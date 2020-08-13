@@ -1,14 +1,18 @@
+// In ADD mode, we have access to:
+// - driver state
+// - week state
+// - setWeek
+// - mode
+
 import React, { useState } from "react";
-import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
-import Modal from '@material-ui/core/Modal';
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
-import MenuItem from '@material-ui/core/MenuItem';
+import { TextField, Modal, Backdrop, Fade, MenuItem, Button } from "@material-ui/core";
 import { convertToClockTime } from "../helpers/convertors";
+import "./PopUpForm.css"
 
 // Options for task type
 const tasks = ["pickup", "dropoff", "other"]
+const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
 
 // Creates time array: [0000, ..., 2300]
   // #TODO => refactor  
@@ -51,9 +55,28 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PopUpForm(props) {
   const classes = useStyles();
+
+  // State for form data
   const [task, setTask] = useState(tasks[0]);
-  const [startTime, setStartTime] = useState(1200);
-  const [endTime, setEndTime] = useState(1300);
+  const [startTime, setStartTime] = useState("1200");
+  const [endTime, setEndTime] = useState("1300");
+  const [day, setDay] = useState(days[0])
+  const [errors, setError] = useState([])
+
+  // If the week is incorrect, add error to errors state (if not there already)
+  // Otherwise, remove error from errors and change the state of week to current value
+  const handleWeekChange = (event) => {
+    if (event.target.value < 1 || event.target.value > 52) {
+      !errors.includes("invalidWeek") && setError(errors => [...errors, "invalidWeek"])
+    } else {
+      setError(errors.filter(error => error !== "invalidWeek"))
+      props.setWeek(event.target.value)
+    }
+  }
+
+  const handleDayChange = (event) => {
+    setDay(event.target.value);
+  }
 
   const handleTaskChange = (event) => {
     setTask(event.target.value);
@@ -64,11 +87,21 @@ export default function PopUpForm(props) {
   };
 
   const handleEndTimeChange = (event) => {
+    if (Number(startTime) >= Number(event.target.value)) {
+      setError(errors => [...errors, "timeError"])
+    } else {
+      setError(errors.filter(error => error !== "timeError"))
+    }
     setEndTime(event.target.value);
   };
 
   const checkFormData = () => {
-    // check whether week is <53
+    // check whether no errors and driver
+    if (errors.length === 0 && props.driver.name) {
+      console.log("yay!")
+    } else {
+      console.log("boooo")
+    }
     // convert week/weekday to day
     // check whether time is available
     // submitFormData()
@@ -92,11 +125,12 @@ export default function PopUpForm(props) {
       }}
     >
       <Fade in={props.open}>
-        <div className={classes.paper}>
+        <div className={classes.paper} id="form" >
           <form className={classes.root} noValidate autoComplete="off">
-            <h2>Add a new task</h2>
+            <h2 className="form-element" >{props.mode} a task</h2>
             <div>
               <TextField
+                error={!props.driver.name}
                 disabled
                 id="trucker"
                 label="Trucker"
@@ -105,14 +139,33 @@ export default function PopUpForm(props) {
               />
 
               <TextField
+                error={errors.includes("invalidWeek")}
                 required
                 id="week"
                 label={"Week #"}
                 defaultValue={props.week}
                 helperText="Enter a week between 1 - 52"
                 variant="outlined"
-                onChange={(event) => props.setWeek(event.target.value)}
+                onChange={handleWeekChange}
               />
+
+              <TextField
+                required
+                id="day"
+                select
+                label={"Day"}
+                value={day}
+                helperText="Select a day"
+                onChange={handleDayChange}
+              >
+                {days.map(day => (
+                  <MenuItem key={day} value={day} style={{textTransform:"capitalize"}}>
+                    {day}
+                  </MenuItem>
+                ))}
+              </TextField>
+              </div>
+              <div>
 
               <TextField
                 required
@@ -128,9 +181,9 @@ export default function PopUpForm(props) {
                   </MenuItem>
                 ))}
               </TextField>
-            </div>
-            <div>
+            
               <TextField
+                error={errors.includes("timeError")}
                 required
                 id="starting-time"
                 select
@@ -146,6 +199,7 @@ export default function PopUpForm(props) {
               </TextField>
 
               <TextField
+                error={errors.includes("timeError")}
                 required
                 id="end-time"
                 select
@@ -159,8 +213,13 @@ export default function PopUpForm(props) {
                   </MenuItem>
                 ))}
               </TextField>
+              <div className="button-wrapper">
+                <Button onSubmit={checkFormData} variant="outlined" color="primary">
+                  {props.mode} Task
+                </Button>
+              </div>
             </div>
-            <button onSubmit={checkFormData}>Create Task</button>
+            
           </form>
         
         </div>

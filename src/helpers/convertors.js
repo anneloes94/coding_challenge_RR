@@ -1,5 +1,5 @@
 function convertToClockTime(time) {
-  // convert "0800" to "8:00am"
+  // converts "0800" to "8:00am"
   let newTime = Number(time)
   let periodString = "am";
   let numberString;
