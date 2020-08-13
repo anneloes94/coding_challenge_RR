@@ -34,11 +34,12 @@ export default function Schedule(props) {
 
         {/* DAYS/TASKS */}
         {/* For every day in days state, assign a Day component: */}
+        {/* We filter tasks by the day they belong to */}
         {props.days.map(day => {
           return(
             day.name && 
             <Day
-              tasks={props.tasks}
+              tasks={props.tasks.filter(task => day.tasks.includes(task.id) )}
               day={day}
               dayName={day.name}
             />
