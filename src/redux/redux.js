@@ -1,5 +1,101 @@
 import { createStore, combineReducers } from 'redux';
 
+// 1. TASKS reducer
+
+const tasksReducerDefaultState = [
+  {
+    id: 1,
+    title: "dropoff",
+    driver: 1,
+    day: 1,
+    start_time: "1000",
+    end_time: "1200"
+
+  },
+  {
+    id: 2,
+    title: "other",
+    driver: 3,
+    day: 5,
+    start_time: "1600",
+    end_time: "1800"
+  },
+  {
+    id: 3,
+    title: "pickup",
+    driver: 2,
+    day: 13,
+    start_time: "1500",
+    end_time: "1600"
+  }
+]
+
+const tasksReducer = (state = tasksReducerDefaultState, action) => {
+  switch (action.type) {
+    default:
+      return state;
+  }
+}
+
+// 2. DAYS reducer
+
+const daysReducerDefaultState = [
+  {
+    id: 1,
+    name: "sunday",
+    tasks: [1]
+  },
+  {
+    id: 5,
+    name: "thursday",
+    tasks: [2]
+  },
+  {
+    id: 13,
+    name: "friday",
+    tasks: [3]
+  }
+]
+
+const daysReducer = (state = daysReducerDefaultState, action) => {
+  switch (action.type) {
+    default:
+      return state
+  }
+}
+
+// 3. WEEK reducer
+
+const weekReducer = (state = 1, action) => {
+  switch (action.type) {
+    default: 
+      return state
+  }
+}
+
+// 4. DRIVER reducer
+
+const driverReducer = (state = {}, action) => {
+  switch (action.type) {
+    default: 
+      return state
+  }
+}
+
+// Store creation
+
+  // key: root state name
+  // value: the reducer managing that
+
+const store = createStore(
+  combineReducers({
+    tasks: tasksReducer,
+    days: daysReducer,
+    week: weekReducer,
+    driver: driverReducer
+  })
+)
+
 // ACTION GENERATORS - functions that return the action objects
 
 const incrementWeek = ({ incrementBy = 1 } = {}) => ({
