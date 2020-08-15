@@ -1,4 +1,4 @@
-import uuid from "uuid";
+import { v1 as uuid } from "uuid";
 
 //      - tasks actions -
 
@@ -20,13 +20,14 @@ const addTask = ({
   },
 });
 
-const deleteTask = ({ id } = {}) => {
-  type: "DELETE_TASK", id;
-};
+const deleteTask = ({ id } = {}) => ({
+  type: "DELETE_TASK", id
+});
 
-const editTask = (id, updates) => {
-  type: "EDIT_TASK";
-  id, updates;
-};
+const editTask = (id, updates) => ({
+  type: "EDIT_TASK",
+  id, 
+  updates
+});
 
 export { addTask, deleteTask, editTask };

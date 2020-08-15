@@ -1,3 +1,5 @@
+import getDayRangeFromWeek from "../helpers/convertors";
+
 // *** Tasks FILTER function ***
 
 const getVisibleTasks = (tasks, driver, week) => {
