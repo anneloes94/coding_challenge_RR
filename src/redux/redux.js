@@ -1,5 +1,4 @@
 import { createStore, combineReducers } from 'redux';
-import uuid from 'uuid'
 
 // *** Tasks FILTER function ***
 
@@ -12,62 +11,9 @@ const getVisibleTasks = (tasks, driver, week) => {
 
   // functions that return the action objects
 
-  //      - tasks actions -     
 
-const addTask = (
-  {
-    title = "",
-    driver = 1,
-    day = 1,
-    startTime = "1000",
-    endTime = "1200" 
-  } = {}
-) => ({
-  type: 'ADD_TASK',
-  task: {
-    id: uuid(),
-    title,
-    driver,
-    day,
-    startTime,
-    endTime
-  }
-});
 
-const deleteTask = ({id} = {}) => {
-  type: 'DELETE_TASK',
-  id
-}
 
-const editTask = (id, updates) => {
-  type: 'EDIT_TASK'
-  id,
-  updates
-}
-
-  //      - week actions -      
-
-const incrementWeek = ({ incrementBy = 1 } = {}) => ({
-  type: 'INCREMENT_WEEK',
-  incrementBy
-})
-
-const decrementWeek = ({ decrementBy = 1} = {}) => ({
-  type: 'DECREMENT_WEEK',
-  decrementBy
-})
-
-const setWeek = ({week}) => ({
-  type: 'SET_WEEK',
-  week
-})
-
-  //      - driver action -      
-
-const setDriver = ({driver}) => ({
-  type: 'SET_DRIVER',
-  driver
-})
 
   //      - days filter action -      
 
