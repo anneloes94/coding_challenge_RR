@@ -6,24 +6,21 @@ import { convertToClockTime, getDayRangeByWeek } from "./helpers/convertors";
 import configureStore from "./store/configureStore";
 import { addTask, editTask, deleteTask } from "./actions/tasks"
 import { incrementWeek, decrementWeek, setWeek} from "./actions/week";
-import { setDriver } from "./actions/driver";
+import setDriver from "./actions/driver";
 import getVisibleTasks from "./selectors/tasks";
 
 const store = configureStore();
 
-const taskOne = store.dispatch(addTask({ title: "pickup", driver: 3, day: 4, startTime: "0400", endTime: "0600"}))
-const taskTwo = store.dispatch(addTask({ title: "dropoff", driver: 2, day: 14, startTime: "0600", endTime: "0700"}))
-store.dispatch(deleteTask({id: 1}))
-store.dispatch(editTask(taskTwo.task.id, {
-  title: "other"
-}))
+store.dispatch(setDriver({id: 1, name: "Bob"}))
 
-console.log(store.getState())
+const state = store.getState()
+console.log(state)
+const visibleTasks = getVisibleTasks(state.tasks, state.driver, state.week)
+console.log(visibleTasks)
 
 store.subscribe(() => {
   const state = console.log(store.getState())
   const visibleTasks = getVisibleTasks(state.tasks, state.driver, state.week)
-  console.log(visibleTasks)
 })
 
 

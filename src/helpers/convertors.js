@@ -1,4 +1,4 @@
-function convertToClockTime(time) {
+export function convertToClockTime(time) {
   // converts "0800" to "8:00am"
   let newTime = Number(time);
   let periodString = "am";
@@ -34,7 +34,7 @@ function convertToClockTime(time) {
   return numberString + periodString;
 }
 
-function getDayRangeByWeek(week) {
+export function getDayRangeByWeek(week) {
   // 1a. Get current week as a range of days
   //    IN: week  - OUT: firstDay, lastDay
   const firstDay = week * 7 - 6;
@@ -43,7 +43,7 @@ function getDayRangeByWeek(week) {
   // 1b. Filter days for this range of days
   //    IN: days, firstDay, lastDay   - OUT: days
   let daysRange = [];
-  for (let dayNumber = firstDay; dayNumber < lastDay; dayNumber++) {
+  for (let dayNumber = firstDay; dayNumber < lastDay + 1; dayNumber++) {
     daysRange.push(dayNumber);
   }
   return daysRange;

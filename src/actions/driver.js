@@ -1,8 +1,11 @@
 //      - driver action -
 
-const setDriver = ({ driver }) => ({
+const setDriver = ({ id, name } = {}) => ({
   type: "SET_DRIVER",
-  driver,
+  driver: {
+    id,
+    name
+  }
 });
 
 export default setDriver;

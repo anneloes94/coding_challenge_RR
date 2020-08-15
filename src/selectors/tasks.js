@@ -1,9 +1,10 @@
-import getDayRangeFromWeek from "../helpers/convertors";
+import { getDayRangeByWeek } from "../helpers/convertors";
 
 // *** Tasks FILTER function ***
 
 const getVisibleTasks = (tasks, driver, week) => {
-  const daysRange = getDayRangeFromWeek(week);
+  console.log(driver.id)
+  const daysRange = getDayRangeByWeek(week);
   return tasks.filter(task => task.driver.id === driver.id && daysRange.includes(task.day))
 };
 
