@@ -4,7 +4,9 @@ import { getDayRangeByWeek } from "../helpers/convertors";
 
 const getVisibleTasks = (tasks, driver, week) => {
   const daysRange = getDayRangeByWeek(week);
-  return tasks.filter(task => task.driver.id === driver.id && daysRange.includes(task.day))
+  return tasks.filter(
+    (task) => task.driver === driver.id && daysRange.includes(task.day)
+  );
 };
 
 export default getVisibleTasks;
