@@ -1,11 +1,5 @@
 import { createStore, combineReducers } from 'redux';
 
-// *** Tasks FILTER function ***
-
-const getVisibleTasks = (tasks, driver, week) => {
-  const daysRange = getDayRangeFromWeek(week);
-  return tasks.filter(task => task.driver.id === driver.id && daysRange.includes(task.day))
-}
 
 // *** ACTIONS ***
 
@@ -27,106 +21,11 @@ const setDaysfilter = (week) => ({
   // 1. Reducers are pure functions (only depends on input)
   // 2. Never change state or action!
 
-// 1. TASKS reducer
-
-const tasksReducerDefaultState = [
-  {
-    id: 1,
-    title: "dropoff",
-    driver: 1,
-    day: 1,
-    start_time: "1000",
-    end_time: "1200"
-  },
-  {
-    id: 2,
-    title: "other",
-    driver: 3,
-    day: 5,
-    start_time: "1600",
-    end_time: "1800"
-  },
-  {
-    id: 3,
-    title: "pickup",
-    driver: 2,
-    day: 13,
-    start_time: "1500",
-    end_time: "1600"
-  }
-]
-
-const tasksReducer = (state = tasksReducerDefaultState, action) => {
-  switch (action.type) {
-    case 'ADD_TASK':
-      return [
-        ...state, 
-        action.task
-      ]
-    case 'DELETE_TASK':
-      return state.filter(task => task.id !== action.id)
-    case 'EDIT_TASK':
-      return state.map((task) => {
-        if (task.id === action.id) {
-          return {
-            ...task,
-            ...action.updates
-          }
-        } else return task;
-      })
-    default:
-      return state;
-  }
-}
 
 
-// 2. WEEK reducer
 
-// Only uses week state and action to give new state output
-const weekReducer = (state = 1, action) => {
-  switch (action.type) {
-    case 'INCREMENT_WEEK':
-      return {
-        week: state.week + incrementBy
-      };
-    case 'DECREMENT_WEEK':
-      return {
-        week: state.week - decrementBy
-      }
-    case 'SET_WEEK':
-      return {
-        week: action.week
-      }
-    default:
-      return state;
-  }
-};
 
-// 3. DRIVER reducer
 
-const driverReducer = (state = {}, action) => {
-  switch (action.type) {
-    case 'SET_DRIVER':
-      return {
-        driver: action.driver
-      }
-    default: 
-      return state
-  }
-}
-
-// *** STORE CREATION
-
-  // key: root state name
-  // value: the reducer managing that
-
-const store = createStore(
-  combineReducers({
-    tasks: tasksReducer,
-    week: weekReducer,
-    driver: driverReducer
-  })
-)
 
 // *** IMPLEMENTATION ***
 
