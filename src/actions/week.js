@@ -1,16 +1,14 @@
 //      - week actions -
 
-const incrementWeek = ({ incrementBy = 1 } = {}) => ({
+const incrementWeek = () => ({
   type: "INCREMENT_WEEK",
-  incrementBy,
 });
 
-const decrementWeek = ({ decrementBy = 1 } = {}) => ({
+const decrementWeek = () => ({
   type: "DECREMENT_WEEK",
-  decrementBy,
 });
 
-const setWeek = ({ week }) => ({
+const setWeek = (week) => ({
   type: "SET_WEEK",
   week,
 });

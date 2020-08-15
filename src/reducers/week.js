@@ -4,17 +4,11 @@
 const weekReducer = (state = 1, action) => {
   switch (action.type) {
     case "INCREMENT_WEEK":
-      return {
-        week: state.week + action.incrementBy,
-      };
+      return state + 1;
     case "DECREMENT_WEEK":
-      return {
-        week: state.week - action.decrementBy,
-      };
+      return state - 1;
     case "SET_WEEK":
-      return {
-        week: action.week,
-      };
+      return action.week;
     default:
       return state;
   }
