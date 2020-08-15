@@ -1,4 +1,4 @@
-function filterDaysByWeek(week, days) {
+function getDayRangeByWeek(week) {
   // 1a. Get current week as a range of days
   //    IN: week  - OUT: firstDay, lastDay
   const firstDay = week * 7 - 6
@@ -6,11 +6,14 @@ function filterDaysByWeek(week, days) {
 
   // 1b. Filter days for this range of days
   //    IN: days, firstDay, lastDay   - OUT: days
-  const filteredDays = days.filter(day => day.id >= firstDay && day.id <= lastDay)
+  let daysRange = [];
+  for (i = firstDay; i < lastDay; i++) {
+    daysRange.push(i)
+  }
   return filteredDays
 }
 
-function filterTasksByDriver(driver, tasks) {
+function filterTasksByDriverWeek(driver, tasks) {
   // 2. Filter tasks for driver
   //    IN: tasks, driver_id  - OUT: tasks
   const filteredTasks = tasks.filter(task => task.driver === driver.id)

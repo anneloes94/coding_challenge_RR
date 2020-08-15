@@ -1,6 +1,13 @@
 import { createStore, combineReducers } from 'redux';
 import uuid from 'uuid'
 
+// *** Tasks FILTER function ***
+
+const getVisibleTasks = (tasks, driver, week) => {
+  const daysRange = getDayRangeFromWeek(week);
+  return tasks.filter(task => task.driver.id === driver.id && daysRange.includes(task.day))
+}
+
 // *** ACTIONS ***
 
   // functions that return the action objects
@@ -62,6 +69,12 @@ const setDriver = ({driver}) => ({
   driver
 })
 
+  //      - days filter action -      
+
+const setDaysfilter = (week) => ({
+  type: 'SET_DAYS_FILTER',
+  week
+})
 
 // *** REDUCERS ***
 
@@ -149,7 +162,7 @@ const driverReducer = (state = {}, action) => {
   switch (action.type) {
     case 'SET_DRIVER':
       return {
-        driver: action.driver;
+        driver: action.driver
       }
     default: 
       return state
@@ -172,7 +185,9 @@ const store = createStore(
 // *** IMPLEMENTATION ***
 
 store.subscribe(() => {
-  console.log(store.getState())
+  const state = console.log(store.getState())
+  const visibleTasks = getVisibleTasks(state.tasks, state.driver, state.week)
+  console.log(visibleTasks)
 })
 
 const taskOne = store.dispatch(addTask({ title: "pickup", driver: 3, day: 4, startTime: "0400", endTime: "0600"}))
