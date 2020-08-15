@@ -7,7 +7,7 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { TextField, Modal, Backdrop, Fade, MenuItem, Button } from "@material-ui/core";
-import { convertToClockTime } from "../helpers/convertors";
+import convertToClockTime from "../helpers/convertors";
 import "./PopUpForm.css"
 
 // Options for task type
