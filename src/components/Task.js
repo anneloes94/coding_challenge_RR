@@ -10,7 +10,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
-export default function Task(props) {
+export default function Task({id, title, driver, day, startTime, endTime}) {
   // Material UI functions & state
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -24,11 +24,11 @@ export default function Task(props) {
   }
   // *** 
 
-  const gridTimePhrase = "time-" + props.startTime + " / time-" + props.endTime;
-  const clockTimePhrase = convertToClockTime(props.startTime) + " - " + convertToClockTime(props.endTime)
+  const gridTimePhrase = "time-" + startTime + " / time-" + endTime;
+  const clockTimePhrase = convertToClockTime(startTime) + " - " + convertToClockTime(endTime)
   
   return(
-    <div key={props.index} className="task" style={{gridColumn: props.dayName, gridRow: gridTimePhrase}}>
+    <div key={id} className="task" style={{gridColumn: "sunday", gridRow: gridTimePhrase}}>
       <div class="action-buttons">
         <IconButton
           aria-label="more"
@@ -65,9 +65,8 @@ export default function Task(props) {
           </MenuItem>
         </Menu>
       </div>
-      <h4 className="task-title" style={{textTransform: "capitalize"}}>{props.title}</h4>
+      <h4 className="task-title" style={{textTransform: "capitalize"}}>{title}</h4>
       <span className="task-time">{clockTimePhrase}</span><br/>
-      <span className="task-day" style={{textTransform: "capitalize"}}>{props.dayName}</span>
     </div>
   )
 }

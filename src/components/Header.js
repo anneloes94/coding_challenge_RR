@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-
+import { connect } from "react-redux"
 import { InputLabel, MenuItem, FormControl, Select, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles'
+import {drivers, dayPeriods} from "../variables"
 import "./Header.css"
 
 // Material-UI styles
@@ -20,24 +21,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header(props) {
+function Header(props) {
   const classes = useStyles();
-  const drivers = [
-    {
-      id: 1,
-      name: "Michael Schumacher"
-    },
-    {
-      id: 2,
-      name: "Lewis Hamilton"
-    },
-    {
-      id: 3,
-      name: "Max Verstappen"
-    }
-  ]
+
   const menuItems = drivers.map((driver, index) => <MenuItem key={index} value={driver.id}>{driver.name}</MenuItem>)
-  const dayPeriodItems = [2, 4, 7, 14, 28].map((driver, index) => <MenuItem key={index} value={driver}>{driver} days</MenuItem>)
+  const dayPeriodItems = dayPeriods.map((driver, index) => <MenuItem key={index} value={driver}>{driver} days</MenuItem>)
   const [hasNoEntry, setEntry] = useState(true)
 
   const handleDriverChange = (event) => {
@@ -111,3 +99,12 @@ export default function Header(props) {
     </div>
   )
 }
+
+const ConnectedHeader = connect((state) => {
+  return {
+    driver: state.driver,
+    week: state.week
+  }
+})(Header)
+
+export default ConnectedHeader;

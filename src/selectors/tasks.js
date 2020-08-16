@@ -9,4 +9,4 @@ const getVisibleTasks = (tasks, driver, week) => {
   );
 };
 
-export default getVisibleTasks;
+export { getVisibleTasks };

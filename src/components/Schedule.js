@@ -1,9 +1,13 @@
 import React, { useState } from "react";
+import { connect } from "react-redux"
 import "./Schedule.css"
-import Day from "./Day"
+import Task from "./Task"
 import PopUpForm from "./PopUpForm"
+import {dayNames} from "../variables"
+import ConnectedApp from "../App";
+import { getVisibleTasks } from "../selectors/tasks"
 
-export default function Schedule(props) {
+function Schedule(props) {
 
   const [showForm, setShowForm] = useState(false);
 
@@ -28,23 +32,19 @@ export default function Schedule(props) {
 
         {/* COLUMN HEADER: DAYS */}
         {/* For an array of Su-Sa, we create a name for each column header in the calendar grid */}
-        {["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"].map((e, i) => {
+        {dayNames.map((e, i) => {
           return <span key={i} className="day-slot" aria-hidden="true" style={{gridColumn: e, textTransform: "capitalize"}}>{e}</span>
         })}
 
         {/* DAYS/TASKS */}
         {/* For every day in days state, assign a Day component: */}
         {/* We filter tasks by the day they belong to */}
-        {props.days.map(day => {
+        {props.filteredTasks.map((task, index) => {
           return(
-            day.name && 
-            <Day
-              tasks={props.tasks.filter(task => day.tasks.includes(task.id) )}
-              day={day}
-              dayName={day.name}
+            <Task
+              task={task}
             />
-          )
-        })}        
+          )})}
       </div>
       <button onClick={displayAddTask} className="add-task" >
         <i className="fa fa-plus" aria-hidden="true"></i>
@@ -53,19 +53,20 @@ export default function Schedule(props) {
       
       {showForm &&
         <PopUpForm
-          driver={props.driver}
           open={showForm}
           handleClose={displayAddTask}
-          week={props.week}
-          setStateWeek={(week) => props.setWeek(week)}
           mode={"Add"}
-          handleTasksState={(task) => props.handleTasksState(task)}
-          handleDaysState={(day) => props.handleDaysState(day)}
-          allTasks={props.tasks}
-          allDays={props.days}
         />
       }
 
     </div>
   )
 }
+
+const ConnectedSchedule = connect((state) => {
+  return {
+    filteredTasks: getVisibleTasks(state.tasks, state.driver, state.week)
+  }
+})(Schedule);
+
+export default ConnectedSchedule;

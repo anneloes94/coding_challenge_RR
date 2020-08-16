@@ -10,17 +10,17 @@ import { incrementWeek, decrementWeek, setWeek} from "./actions/week";
 import setDriver from "./actions/driver";
 import getVisibleTasks from "./selectors/tasks";
 
-const store = configureStore();
+// const store = configureStore();
 
-store.dispatch(setDriver({id: 1, name: "Bob"}))
+// store.dispatch(setDriver({id: 1, name: "Bob"}))
 
-const state = store.getState()
-const visibleTasks = getVisibleTasks(state.tasks, state.driver, state.week)
+// const state = store.getState()
+// const visibleTasks = getVisibleTasks(state.tasks, state.driver, state.week)
 
-store.subscribe(() => {
-  const state = console.log(store.getState())
-  const visibleTasks = getVisibleTasks(state.tasks, state.driver, state.week)
-})
+// store.subscribe(() => {
+//   const state = console.log(store.getState())
+//   const visibleTasks = getVisibleTasks(state.tasks, state.driver, state.week)
+// })
 
 
 
@@ -28,25 +28,22 @@ function App(props) {
 
   return (
     <div className="App">
+
       <div id="topnav">
         <p>Task schedule</p>
-        <p>{props.name}</p>
       </div>
 
-      {/* <Header 
-      />
- 
-      <Schedule 
-        // handleTasksState={(task) => setTask([...tasks, task])}
-        // handleDaysState={(day) => setDay([...days, day])}
-      /> */}
+      <Header />
+      <Schedule />
     </div>
   );
 };
 
 const ConnectedApp = connect((state) => {
+  // format:
+  // props name: state value
   return {
-    name: "Anne"
+    name: state.tasks[0].driver
   }
 })(App);
 
