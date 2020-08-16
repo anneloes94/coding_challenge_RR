@@ -1,5 +1,6 @@
 import React from "react";
 import "./App.css";
+import { connect } from "react-redux"
 import Header from "./components/Header";
 import Schedule from "./components/Schedule";
 import { convertToClockTime, getDayRangeByWeek } from "./helpers/convertors";
@@ -14,9 +15,7 @@ const store = configureStore();
 store.dispatch(setDriver({id: 1, name: "Bob"}))
 
 const state = store.getState()
-console.log(state)
 const visibleTasks = getVisibleTasks(state.tasks, state.driver, state.week)
-console.log(visibleTasks)
 
 store.subscribe(() => {
   const state = console.log(store.getState())
@@ -25,12 +24,13 @@ store.subscribe(() => {
 
 
 
-export default function App() {
+function App(props) {
 
   return (
     <div className="App">
       <div id="topnav">
         <p>Task schedule</p>
+        <p>{props.name}</p>
       </div>
 
       {/* <Header 
@@ -42,4 +42,12 @@ export default function App() {
       /> */}
     </div>
   );
-}
+};
+
+const ConnectedApp = connect((state) => {
+  return {
+    name: "Anne"
+  }
+})(App);
+
+export default ConnectedApp;
