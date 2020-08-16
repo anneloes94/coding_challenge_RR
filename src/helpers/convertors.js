@@ -1,3 +1,5 @@
+import { dayNames } from "../variables"
+
 export function convertToClockTime(time) {
   // converts "0800" to "8:00am"
   let newTime = Number(time);
@@ -49,4 +51,12 @@ export function getDayRangeByWeek(week) {
   return daysRange;
 }
 
-export default { convertToClockTime, getDayRangeByWeek };
+export function convertDayNumberToName(dayNumber) {
+  // day 1: sunday (dayNames[0])
+  // day 5: thursday (dayNames[4])
+  // day 13: friday (dayNames[6])
+  const numberInArray = (dayNumber % 7) - 1 
+  return dayNames[numberInArray]
+}
+
+export default { convertToClockTime, getDayRangeByWeek, convertDayNumberToName };

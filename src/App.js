@@ -43,7 +43,7 @@ const ConnectedApp = connect((state) => {
   // format:
   // props name: state value
   return {
-    name: state.tasks[0].driver
+    name: state.tasks[0].driver,
   }
 })(App);
 

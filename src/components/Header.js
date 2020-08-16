@@ -4,6 +4,8 @@ import { InputLabel, MenuItem, FormControl, Select, Button } from '@material-ui/
 import { makeStyles } from '@material-ui/core/styles'
 import {drivers, dayPeriods} from "../variables"
 import "./Header.css"
+import setDriver from "../actions/driver"
+import { incrementWeek, decrementWeek } from '../actions/week';
 
 // Material-UI styles
 const useStyles = makeStyles((theme) => ({
@@ -30,15 +32,15 @@ function Header(props) {
 
   const handleDriverChange = (event) => {
     let newDriverObject = drivers.filter(driver => driver.id === event.target.value)
-    props.changeDriver(newDriverObject[0])
+    props.dispatch(setDriver(newDriverObject[0]))
     setEntry(false)
   }
 
   const handleWeekChange = (input) => {
     if (input === "up") {
-      props.changeWeek(props.week + 1)
+      props.dispatch(incrementWeek())
     } else if (input === "down") {
-      props.changeWeek(props.week - 1)
+      props.dispatch(decrementWeek())
     }
   }
 

@@ -39,10 +39,10 @@ function Schedule(props) {
         {/* DAYS/TASKS */}
         {/* For every day in days state, assign a Day component: */}
         {/* We filter tasks by the day they belong to */}
-        {props.filteredTasks.map((task, index) => {
+        {props.filteredTasks.map((task) => {
           return(
             <Task
-              task={task}
+              {...task}
             />
           )})}
       </div>

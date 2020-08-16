@@ -1,5 +1,5 @@
 import React from "react";
-import convertToClockTime from "../helpers/convertors"
+import { convertToClockTime, convertDayNumberToName } from "../helpers/convertors"
 import "./Task.css"
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
