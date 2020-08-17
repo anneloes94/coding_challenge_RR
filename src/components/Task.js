@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { connect } from "react-redux"
 import { convertToClockTime, convertDayNumberToName } from "../helpers/convertors"
 import "./Task.css";
@@ -10,11 +10,21 @@ import ListItemText from '@material-ui/core/ListItemText';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import PopUpForm from "./PopUpForm";
 
 function Task({dispatch, id, title, driver, day, startTime, endTime}) {
   // Material UI functions & state
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const [mode, setMode] = useState(undefined)
+
+  const [showForm, setShowForm] = useState(false);
+
+  function displayForm (mode) {
+    setShowForm(!showForm)
+    setMode(mode)
+    handleClose()
+  }
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -52,13 +62,13 @@ function Task({dispatch, id, title, driver, day, startTime, endTime}) {
             },
           }}
         >
-          <MenuItem key={0} selected={true} onClick={handleClose}>
+          <MenuItem key={0} selected={true} onClick={() => {displayForm("Edit")}}>
             <ListItemIcon>
               <EditIcon fontSize="small" />
             </ListItemIcon>
             <ListItemText primary="Edit" />
           </MenuItem>
-          <MenuItem key={1} selected={false} onClick={handleClose}>
+          <MenuItem key={1} selected={false} onClick={() => {displayForm("Delete")}}>
             <ListItemIcon>
               <DeleteIcon fontSize="small" />
             </ListItemIcon>
@@ -69,6 +79,15 @@ function Task({dispatch, id, title, driver, day, startTime, endTime}) {
       <h4 className="task-title" style={{textTransform: "capitalize"}}>{title}</h4>
       <span className="task-time">{clockTimePhrase}</span><br/>
       <span className="task-day" style={{textTransform: "capitalize"}}>{convertDayNumberToName(day)}</span>
+
+      {showForm && 
+        <PopUpForm
+          task={{id, title, driver, day, startTime, endTime}}
+          open={showForm}
+          handleClose={displayForm}
+          mode={mode}
+        />
+      }
     </div>
   )
 }

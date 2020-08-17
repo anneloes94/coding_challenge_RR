@@ -6,7 +6,7 @@ import { convertToClockTime, convertDayNumberToName } from "../helpers/convertor
 import "./PopUpForm.css"
 import { dayNames, tasks, times } from "../variables";
 import { setWeek } from "../actions/week"
-import { addTask } from "../actions/tasks";
+import { addTask, deleteTask } from "../actions/tasks";
 import { getVisibleTasks } from "../selectors/tasks"
 
 // Material UI styles
@@ -31,11 +31,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 // ***
 
-function PopUpForm({dispatch, open, handleClose, mode, driver, week, filteredTasks}) {
+function PopUpForm({task, dispatch, open, handleClose, mode, driver, week, filteredTasks}) {
   const classes = useStyles();
 
   // State for form data
-  const [task, setTask] = useState(tasks[0]);
+  const [taskName, setTaskName] = useState(tasks[0]);
   const [startTime, setStartTime] = useState("1200");
   const [endTime, setEndTime] = useState("1300");
   const [day, setDay] = useState(1)
@@ -59,8 +59,8 @@ function PopUpForm({dispatch, open, handleClose, mode, driver, week, filteredTas
     setDay(event.target.value);
   }
 
-  const handleTaskChange = (event) => {
-    setTask(event.target.value);
+  const handleTaskNameChange = (event) => {
+    setTaskName(event.target.value);
   };
 
   const handleStartingTimeChange = (event) => {
@@ -80,19 +80,18 @@ function PopUpForm({dispatch, open, handleClose, mode, driver, week, filteredTas
   };
 
   const checkFormData = () => {
-    // check whether there are no errors in form and driver is set
-    if (errors.length === 0 && driver.name) {
-      showWarning(false)
-      
-      // convert week/weekday to dayNumber (for days state)
-      const dayInWeek = dayNames.indexOf(day) + 1
-      const formDayNumber = (week - 1) * 7 + dayInWeek
-      
-      // we now have all variables - call submitFormData
-      submitFormData({title: task, driver: driver.id, day, startTime, endTime})
+    if (mode === "Delete") {
+      submitFormData(task.id)
     } else {
-      console.log("booo")
-      showWarning(true)
+      // check whether there are no errors in form and driver is set
+      if (errors.length === 0 && driver.name) {
+        showWarning(false)
+        
+        // we now have all variables - call submitFormData
+        submitFormData({title: taskName, driver: driver.id, day, startTime, endTime})
+      } else {
+        showWarning(true)
+      }
     }
   }
   
@@ -100,27 +99,31 @@ function PopUpForm({dispatch, open, handleClose, mode, driver, week, filteredTas
     // check if current time has conflict with any of filteredTasks
     let submitTask = true;
 
-    filteredTasks.forEach(filteredTask => {
-      // if filteredTask's day is similar to task's, keep digging:
-      if (filteredTask.day === task.day) {
-        // in the array of times ["0000", "0100", ...], get the range of the filteredTask's startTime/endTime:
-        const beginningOfRange = times.indexOf(filteredTask.startTime)
-        const endOfRange = times.indexOf(filteredTask.endTime)
-        // now get the position of the submitted task in that array
-        const indexOfStartTime = times.indexOf(task.startTime)
-        const indexOfEndTime = times.indexOf(task.endTime)
-        // if task's startTime or endTime is between filteredTask's startTime/endTime, giver error:
-        if ((indexOfStartTime >= beginningOfRange && indexOfStartTime < endOfRange ) || (
-          indexOfEndTime > beginningOfRange && indexOfStartTime < endOfRange
-        )){
-          console.log("nooo don't do this")
-          setTimeConflict(true)
-          submitTask = false;
+    mode !== "Delete" && 
+      filteredTasks.forEach(filteredTask => {
+        // if filteredTask's day is similar to task's, keep digging:
+        if (filteredTask.day === task.day) {
+          // in the array of times ["0000", "0100", ...], get the range of the filteredTask's startTime/endTime:
+          const beginningOfRange = times.indexOf(filteredTask.startTime)
+          const endOfRange = times.indexOf(filteredTask.endTime)
+          // now get the position of the submitted task in that array
+          const indexOfStartTime = times.indexOf(task.startTime)
+          const indexOfEndTime = times.indexOf(task.endTime)
+          // if task's startTime or endTime is between filteredTask's startTime/endTime, giver error:
+          if ((indexOfStartTime >= beginningOfRange && indexOfStartTime < endOfRange ) || (
+            indexOfEndTime > beginningOfRange && indexOfStartTime < endOfRange
+          )){
+            setTimeConflict(true)
+            submitTask = false;
+          }
         }
-      }
-    })
+      })
+
       // else: 
-    submitTask && dispatch(addTask(task))
+    mode === "Add" && submitTask && dispatch(addTask(task))
+    mode === "Edit" && console.log("hello")
+    mode === "Delete" && dispatch(deleteTask(task))
+    !timeConflict && handleClose()
   }
 
   return (
@@ -148,6 +151,8 @@ function PopUpForm({dispatch, open, handleClose, mode, driver, week, filteredTas
               <span>Your task could not be submitted due to a <b>time conflict</b>. Please select a different time.</span>
             </div>
           }
+
+          {(mode === "Add" || mode === "Edit") &&
           <form className={classes.root} noValidate autoComplete="off">
             <h2 className="form-element" >{mode} a task</h2>
             <div>
@@ -194,12 +199,12 @@ function PopUpForm({dispatch, open, handleClose, mode, driver, week, filteredTas
                 id="task"
                 select
                 label="Task"
-                value={task}
-                onChange={handleTaskChange}
+                value={taskName}
+                onChange={handleTaskNameChange}
               >
-                {tasks.map(task => (
-                  <MenuItem key={task} value={task} style={{textTransform:"capitalize"}}>
-                    {task}
+                {tasks.map(taskName => (
+                  <MenuItem key={taskName} value={taskName} style={{textTransform:"capitalize"}}>
+                    {taskName}
                   </MenuItem>
                 ))}
               </TextField>
@@ -235,15 +240,24 @@ function PopUpForm({dispatch, open, handleClose, mode, driver, week, filteredTas
                   </MenuItem>
                 ))}
               </TextField>
-              <div className="button-wrapper">
-                <Button onClick={checkFormData} variant="outlined" color="primary">
-                  {mode} Task
-                </Button>
-              </div>
             </div>
             
-          </form>
+          </form>}
+
+          {mode === "Delete" && 
+          <div>
+            <h3>Are you sure you want to delete this task?</h3>
+          </div>}
         
+          <div className="button-wrapper">
+            <Button onClick={() => handleClose()} variant="outlined" color="secondary">
+              Cancel
+            </Button>
+            <Button onClick={checkFormData} variant="contained" color="primary">
+              {mode} Task
+            </Button>
+          </div>
+
         </div>
       </Fade>
     </Modal>
