@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux"
 import { TextField, Modal, Backdrop, Fade, MenuItem, Button } from "@material-ui/core";
-import { convertToClockTime } from "../helpers/convertors";
+import { convertToClockTime, convertDayNumberToName } from "../helpers/convertors";
 import "./PopUpForm.css"
 import { dayNames, tasks, times } from "../variables";
-import {setWeek} from "../actions/week"
+import { setWeek } from "../actions/week"
+import { addTask } from "../actions/tasks";
+import { getVisibleTasks } from "../selectors/tasks"
 
 // Material UI styles
 const useStyles = makeStyles((theme) => ({
@@ -29,16 +31,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 // ***
 
-function PopUpForm({dispatch, open, handleClose, mode, driver, week}) {
+function PopUpForm({dispatch, open, handleClose, mode, driver, week, filteredTasks}) {
   const classes = useStyles();
 
   // State for form data
   const [task, setTask] = useState(tasks[0]);
   const [startTime, setStartTime] = useState("1200");
   const [endTime, setEndTime] = useState("1300");
-  const [day, setDay] = useState(dayNames[0])
+  const [day, setDay] = useState(1)
   const [errors, setError] = useState([])
   const [warning, showWarning] = useState(false)
+  const [timeConflict, setTimeConflict] = useState(false)
 
   // If the week is incorrect, add error to errors state (if not there already)
   // Otherwise, remove error from errors and change the state of week to current value
@@ -62,6 +65,7 @@ function PopUpForm({dispatch, open, handleClose, mode, driver, week}) {
 
   const handleStartingTimeChange = (event) => {
     setStartTime(event.target.value);
+    setTimeConflict(false);
   };
   // ---
 
@@ -72,6 +76,7 @@ function PopUpForm({dispatch, open, handleClose, mode, driver, week}) {
       setError(errors.filter(error => error !== "timeError"))
     }
     setEndTime(event.target.value);
+    setTimeConflict(false);
   };
 
   const checkFormData = () => {
@@ -84,30 +89,38 @@ function PopUpForm({dispatch, open, handleClose, mode, driver, week}) {
       const formDayNumber = (week - 1) * 7 + dayInWeek
       
       // we now have all variables - call submitFormData
-      submitFormData(driver.id, day, formDayNumber, task, startTime, endTime)
+      submitFormData({title: task, driver: driver.id, day, startTime, endTime})
     } else {
       console.log("booo")
       showWarning(true)
     }
   }
   
-  const submitFormData = (driverID, dayName, dayNumber, taskName, startTime, endTime) => {
-    // check if days state already has this day (dayNumber) stored
+  const submitFormData = (task) => {
+    // check if current time has conflict with any of filteredTasks
+    let submitTask = true;
 
-    // handleTasksState({
-    //   id: newTaskID,
-    //   title: taskName,
-    //   driver: driverID,
-    //   start_time: startTime,
-    //   end_time: endTime
-    // });
-    
-    // else: add new day and add task
-    
-    // if so, check if time of current task has conflict with any task in tasks array of day
-      // if not: great, add it to day (setDay) and add task (setTask)
-
-      // if so: too bad, give a warning
+    filteredTasks.forEach(filteredTask => {
+      // if filteredTask's day is similar to task's, keep digging:
+      if (filteredTask.day === task.day) {
+        // in the array of times ["0000", "0100", ...], get the range of the filteredTask's startTime/endTime:
+        const beginningOfRange = times.indexOf(filteredTask.startTime)
+        const endOfRange = times.indexOf(filteredTask.endTime)
+        // now get the position of the submitted task in that array
+        const indexOfStartTime = times.indexOf(task.startTime)
+        const indexOfEndTime = times.indexOf(task.endTime)
+        // if task's startTime or endTime is between filteredTask's startTime/endTime, giver error:
+        if ((indexOfStartTime >= beginningOfRange && indexOfStartTime < endOfRange ) || (
+          indexOfEndTime > beginningOfRange && indexOfStartTime < endOfRange
+        )){
+          console.log("nooo don't do this")
+          setTimeConflict(true)
+          submitTask = false;
+        }
+      }
+    })
+      // else: 
+    submitTask && dispatch(addTask(task))
   }
 
   return (
@@ -128,6 +141,11 @@ function PopUpForm({dispatch, open, handleClose, mode, driver, week}) {
           {warning && 
             <div class="warning">
               <span>Please review your entry below</span>
+            </div>
+          }
+          {timeConflict && 
+            <div class="warning">
+              <span>Your task could not be submitted due to a <b>time conflict</b>. Please select a different time.</span>
             </div>
           }
           <form className={classes.root} noValidate autoComplete="off">
@@ -158,13 +176,13 @@ function PopUpForm({dispatch, open, handleClose, mode, driver, week}) {
                 id="day"
                 select
                 label={"Day"}
-                value={day}
+                defaultValue={day}
                 helperText="Select a day"
                 onChange={handleDayChange}
               >
-                {dayNames.map(day => (
-                  <MenuItem key={day} value={day} style={{textTransform:"capitalize"}}>
-                    {day}
+                {dayNames.map((dayName, index) => (
+                  <MenuItem key={index} value={(week - 1) * 7 + index + 1} style={{textTransform:"capitalize"}}>
+                    {dayName}
                   </MenuItem>
                 ))}
               </TextField>
@@ -235,7 +253,8 @@ function PopUpForm({dispatch, open, handleClose, mode, driver, week}) {
 const mapStateToProps = (({tasks, driver, week}) => {
   return {
     driver,
-    week
+    week,
+    filteredTasks: getVisibleTasks(tasks, driver, week)
   }
 });
 

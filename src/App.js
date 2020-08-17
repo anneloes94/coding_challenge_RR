@@ -24,7 +24,7 @@ import getVisibleTasks from "./selectors/tasks";
 
 
 
-function App(props) {
+export default function App(props) {
 
   return (
     <div className="App">
@@ -38,13 +38,3 @@ function App(props) {
     </div>
   );
 };
-
-const ConnectedApp = connect((state) => {
-  // format:
-  // props name: state value
-  return {
-    name: state.tasks[0].driver,
-  }
-})(App);
-
-export default ConnectedApp;

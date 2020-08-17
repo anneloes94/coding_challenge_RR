@@ -62,10 +62,10 @@ function Schedule(props) {
   )
 }
 
-const ConnectedSchedule = connect(({tasks, driver, week}) => {
+const mapStateToProps = (({tasks, driver, week}) => {
   return {
     filteredTasks: getVisibleTasks(tasks, driver, week)
   }
-})(Schedule);
+});
 
-export default ConnectedSchedule;
+export default connect(mapStateToProps)(Schedule);
