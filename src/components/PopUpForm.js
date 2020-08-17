@@ -6,7 +6,7 @@ import { convertToClockTime, convertDayNumberToName } from "../helpers/convertor
 import "./PopUpForm.css"
 import { dayNames, tasks, times } from "../variables";
 import { setWeek } from "../actions/week"
-import { addTask, deleteTask } from "../actions/tasks";
+import { addTask, editTask, deleteTask } from "../actions/tasks";
 import { getVisibleTasks } from "../selectors/tasks"
 
 // Material UI styles
@@ -35,10 +35,10 @@ function PopUpForm({task, dispatch, open, handleClose, mode, driver, week, filte
   const classes = useStyles();
 
   // State for form data
-  const [taskName, setTaskName] = useState(tasks[0]);
-  const [startTime, setStartTime] = useState("1200");
-  const [endTime, setEndTime] = useState("1300");
-  const [day, setDay] = useState(1)
+  const [taskName, setTaskName] = useState(task === undefined ? tasks[0] : task.title);
+  const [startTime, setStartTime] = useState(task === undefined ? "1200" : task.startTime);
+  const [endTime, setEndTime] = useState(task === undefined ? "1300" : task.endTime);
+  const [day, setDay] = useState(task === undefined ? 1 : task.day)
   const [errors, setError] = useState([])
   const [warning, showWarning] = useState(false)
   const [timeConflict, setTimeConflict] = useState(false)
@@ -95,21 +95,21 @@ function PopUpForm({task, dispatch, open, handleClose, mode, driver, week, filte
     }
   }
   
-  const submitFormData = (task) => {
+  const submitFormData = (submittedTask) => {
     // check if current time has conflict with any of filteredTasks
     let submitTask = true;
 
     mode !== "Delete" && 
       filteredTasks.forEach(filteredTask => {
         // if filteredTask's day is similar to task's, keep digging:
-        if (filteredTask.day === task.day) {
+        if (filteredTask.day === submittedTask.day && filteredTask.id !== task.id) {
           // in the array of times ["0000", "0100", ...], get the range of the filteredTask's startTime/endTime:
           const beginningOfRange = times.indexOf(filteredTask.startTime)
           const endOfRange = times.indexOf(filteredTask.endTime)
           // now get the position of the submitted task in that array
-          const indexOfStartTime = times.indexOf(task.startTime)
-          const indexOfEndTime = times.indexOf(task.endTime)
-          // if task's startTime or endTime is between filteredTask's startTime/endTime, giver error:
+          const indexOfStartTime = times.indexOf(submittedTask.startTime)
+          const indexOfEndTime = times.indexOf(submittedTask.endTime)
+          // if submittedTask's startTime or endTime is between filteredTask's startTime/endTime, giver error:
           if ((indexOfStartTime >= beginningOfRange && indexOfStartTime < endOfRange ) || (
             indexOfEndTime > beginningOfRange && indexOfStartTime < endOfRange
           )){
@@ -121,7 +121,7 @@ function PopUpForm({task, dispatch, open, handleClose, mode, driver, week, filte
 
       // else: 
     mode === "Add" && submitTask && dispatch(addTask(task))
-    mode === "Edit" && console.log("hello")
+    mode === "Edit" && submitTask && console.log("here: ", submittedTask, task.id) && dispatch(editTask(task.id, submittedTask))
     mode === "Delete" && dispatch(deleteTask(task))
     !timeConflict && handleClose()
   }

@@ -28,6 +28,7 @@ const tasksReducerDefaultState = [
 ];
 
 const tasksReducer = (state = tasksReducerDefaultState, action) => {
+  console.log("in reducer: ", action)
   switch (action.type) {
     case "ADD_TASK":
       return [...state, action.task];
