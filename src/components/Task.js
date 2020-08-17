@@ -28,7 +28,7 @@ export default function Task({id, title, driver, day, startTime, endTime}) {
   const clockTimePhrase = convertToClockTime(startTime) + " - " + convertToClockTime(endTime)
   
   return(
-    <div key={id} className="task" style={{gridColumn: "sunday", gridRow: gridTimePhrase}}>
+    <div key={id} className="task" style={{gridColumn: convertDayNumberToName(day), gridRow: gridTimePhrase}}>
       <div class="action-buttons">
         <IconButton
           aria-label="more"
@@ -67,6 +67,7 @@ export default function Task({id, title, driver, day, startTime, endTime}) {
       </div>
       <h4 className="task-title" style={{textTransform: "capitalize"}}>{title}</h4>
       <span className="task-time">{clockTimePhrase}</span><br/>
+      <span className="task-day" style={{textTransform: "capitalize"}}>{convertDayNumberToName(day)}</span>
     </div>
   )
 }

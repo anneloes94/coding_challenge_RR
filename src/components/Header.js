@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Header(props) {
+function Header({dispatch, driver, week}) {
   const classes = useStyles();
 
   const menuItems = drivers.map((driver, index) => <MenuItem key={index} value={driver.id}>{driver.name}</MenuItem>)
@@ -32,15 +32,15 @@ function Header(props) {
 
   const handleDriverChange = (event) => {
     let newDriverObject = drivers.filter(driver => driver.id === event.target.value)
-    props.dispatch(setDriver(newDriverObject[0]))
+    dispatch(setDriver(newDriverObject[0]))
     setEntry(false)
   }
 
   const handleWeekChange = (input) => {
     if (input === "up") {
-      props.dispatch(incrementWeek())
+      dispatch(incrementWeek())
     } else if (input === "down") {
-      props.dispatch(decrementWeek())
+      dispatch(decrementWeek())
     }
   }
 
@@ -67,18 +67,18 @@ function Header(props) {
 
       <div className="header-section weekDisplay">
         <div>
-        {props.week !== 1 && <button className="week-button" onClick={() => handleWeekChange("down")}><i className="fas fa-angle-left"></i></button>}
+        {week !== 1 && <button className="week-button" onClick={() => handleWeekChange("down")}><i className="fas fa-angle-left"></i></button>}
         </div>
         <div>
-          Week {props.week}
+          Week {week}
         </div>
         <div>
-        {props.week !== 52 && <button className="week-button" onClick={() => handleWeekChange("up")}><i className="fas fa-angle-right"></i></button>}
+        {week !== 52 && <button className="week-button" onClick={() => handleWeekChange("up")}><i className="fas fa-angle-right"></i></button>}
         </div>
       </div>
 
       <div className="header-section downloadCSV">
-        {props.driver.name && <p className="first">{props.driver.name}'s schedule per</p>}
+        {driver.name && <p className="first">{driver.name}'s schedule per</p>}
         <div className="second">
           <FormControl className={classes.formControl}>
             <InputLabel id="demo-simple-select-label"># of days</InputLabel>
