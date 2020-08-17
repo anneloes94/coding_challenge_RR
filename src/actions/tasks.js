@@ -20,12 +20,12 @@ const addTask = ({
   },
 });
 
-const deleteTask = ({ id } = {}) => ({
+const deleteTask = (id) => ({
   type: "DELETE_TASK", id
 });
 
 const editTask = (id, updates) => ({
-  type: "EDIT_TASK",
+  type: "EDIT_TASK", 
   id, 
   updates
 });
