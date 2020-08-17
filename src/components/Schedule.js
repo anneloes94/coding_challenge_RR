@@ -1,9 +1,13 @@
 import React, { useState } from "react";
+import { connect } from "react-redux"
 import "./Schedule.css"
-import Day from "./Day"
+import Task from "./Task"
 import PopUpForm from "./PopUpForm"
+import {dayNames} from "../variables"
+import ConnectedApp from "../App";
+import { getVisibleTasks } from "../selectors/tasks"
 
-export default function Schedule(props) {
+function Schedule(props) {
 
   const [showForm, setShowForm] = useState(false);
 
@@ -16,7 +20,7 @@ export default function Schedule(props) {
       <div className="grid">
         
         {/* ROW HEADER: TIME */}
-        {/* For an array of 0 to 23 hours, we create a name for each row header in the calendar grid */}
+        {/* For an array of 0 to 24 hours, we create a name for each row header in the calendar grid */}
         {[...Array(25)].map((e,i) => {
           if (i < 10) {
             i = "0" + i
@@ -28,23 +32,18 @@ export default function Schedule(props) {
 
         {/* COLUMN HEADER: DAYS */}
         {/* For an array of Su-Sa, we create a name for each column header in the calendar grid */}
-        {["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"].map((e, i) => {
+        {dayNames.map((e, i) => {
           return <span key={i} className="day-slot" aria-hidden="true" style={{gridColumn: e, textTransform: "capitalize"}}>{e}</span>
         })}
 
         {/* DAYS/TASKS */}
-        {/* For every day in days state, assign a Day component: */}
-        {/* We filter tasks by the day they belong to */}
-        {props.days.map(day => {
+        {/* For every task in tasks state, assign a Task component: */}
+        {props.filteredTasks.map((task) => {
           return(
-            day.name && 
-            <Day
-              tasks={props.tasks.filter(task => day.tasks.includes(task.id) )}
-              day={day}
-              dayName={day.name}
+            <Task
+              {...task}
             />
-          )
-        })}        
+          )})}
       </div>
       <button onClick={displayAddTask} className="add-task" >
         <i className="fa fa-plus" aria-hidden="true"></i>
@@ -53,19 +52,20 @@ export default function Schedule(props) {
       
       {showForm &&
         <PopUpForm
-          driver={props.driver}
           open={showForm}
           handleClose={displayAddTask}
-          week={props.week}
-          setStateWeek={(week) => props.setWeek(week)}
           mode={"Add"}
-          handleTasksState={(task) => props.handleTasksState(task)}
-          handleDaysState={(day) => props.handleDaysState(day)}
-          allTasks={props.tasks}
-          allDays={props.days}
         />
       }
 
     </div>
   )
 }
+
+const mapStateToProps = (({tasks, driver, week}) => {
+  return {
+    filteredTasks: getVisibleTasks(tasks, driver, week)
+  }
+});
+
+export default connect(mapStateToProps)(Schedule);

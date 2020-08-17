@@ -1,93 +1,40 @@
-import React, { useState } from "react";
+import React from "react";
 import "./App.css";
+import { connect } from "react-redux"
 import Header from "./components/Header";
-import Schedule from "./components/Schedule"
-import { filterDaysByWeek, filterTasksByDriver } from "./helpers/selectors"
+import Schedule from "./components/Schedule";
+import { convertToClockTime, getDayRangeByWeek } from "./helpers/convertors";
+import configureStore from "./store/configureStore";
+import { addTask, editTask, deleteTask } from "./actions/tasks"
+import { incrementWeek, decrementWeek, setWeek} from "./actions/week";
+import setDriver from "./actions/driver";
+import getVisibleTasks from "./selectors/tasks";
 
-export default function App() {
+// const store = configureStore();
 
-  // STATE
-  const [week, setWeek] = useState(1);
-  const [driver, setDriver] = useState({});
-  const [tasks, setTask] = useState([
-    {
-      id: 1,
-      title: "dropoff",
-      driver: 1,
-      start_time: "1000",
-      end_time: "1200"
+// store.dispatch(setDriver({id: 1, name: "Bob"}))
 
-    },
-    {
-      id: 2,
-      title: "other",
-      driver: 3,
-      start_time: "1600",
-      end_time: "1800"
-    },
-    {
-      id: 3,
-      title: "pickup",
-      driver: 2,
-      start_time: "1500",
-      end_time: "1600"
-    }
-  ])
-  const [days, setDay] = useState([
-    {
-      id: 1,
-      name: "sunday",
-      tasks: [1]
-    },
-    {
-      id: 5,
-      name: "thursday",
-      tasks: [2]
-    },
-    {
-      id: 13,
-      name: "friday",
-      tasks: [3]
-    }
-  ])
+// const state = store.getState()
+// const visibleTasks = getVisibleTasks(state.tasks, state.driver, state.week)
 
-  // FUNCTIONS
+// store.subscribe(() => {
+//   const state = console.log(store.getState())
+//   const visibleTasks = getVisibleTasks(state.tasks, state.driver, state.week)
+// })
 
-  const changeDriver = (newDriver) => {
-    setDriver(newDriver)
-  }
 
-  const changeWeek = (newWeek) => {
-    setWeek(newWeek)
-  }
 
-  // RENDERING
+export default function App(props) {
 
   return (
     <div className="App">
+
       <div id="topnav">
         <p>Task schedule</p>
       </div>
 
-      <Header 
-        changeDriver={changeDriver}
-        changeWeek={changeWeek}
-        driver={driver} 
-        week={week}
-        tasks={filterTasksByDriver(driver, tasks)}
-        days={filterDaysByWeek(week, days)} 
-      />
-
-      {driver && 
-      <Schedule 
-        driver={driver}
-        tasks={filterTasksByDriver(driver, tasks)}
-        days={filterDaysByWeek(week, days)}
-        week={week}
-        handleTasksState={(task) => setTask([...tasks, task])}
-        handleDaysState={(day) => setDay([...days, day])}
-        setWeek={setWeek}
-      />}
+      <Header />
+      <Schedule />
     </div>
   );
-}
+};

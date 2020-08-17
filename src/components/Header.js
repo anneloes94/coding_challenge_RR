@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-
+import { connect } from "react-redux"
 import { InputLabel, MenuItem, FormControl, Select, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles'
+import {drivers, dayPeriods} from "../variables"
 import "./Header.css"
+import setDriver from "../actions/driver"
+import { incrementWeek, decrementWeek } from '../actions/week';
 
 // Material-UI styles
 const useStyles = makeStyles((theme) => ({
@@ -20,37 +23,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header(props) {
+function Header({dispatch, driver, week}) {
   const classes = useStyles();
-  const drivers = [
-    {
-      id: 1,
-      name: "Michael Schumacher"
-    },
-    {
-      id: 2,
-      name: "Lewis Hamilton"
-    },
-    {
-      id: 3,
-      name: "Max Verstappen"
-    }
-  ]
+
   const menuItems = drivers.map((driver, index) => <MenuItem key={index} value={driver.id}>{driver.name}</MenuItem>)
-  const dayPeriodItems = [2, 4, 7, 14, 28].map((driver, index) => <MenuItem key={index} value={driver}>{driver} days</MenuItem>)
+  const dayPeriodItems = dayPeriods.map((driver, index) => <MenuItem key={index} value={driver}>{driver} days</MenuItem>)
   const [hasNoEntry, setEntry] = useState(true)
 
   const handleDriverChange = (event) => {
     let newDriverObject = drivers.filter(driver => driver.id === event.target.value)
-    props.changeDriver(newDriverObject[0])
+    dispatch(setDriver(newDriverObject[0]))
     setEntry(false)
   }
 
   const handleWeekChange = (input) => {
     if (input === "up") {
-      props.changeWeek(props.week + 1)
+      dispatch(incrementWeek())
     } else if (input === "down") {
-      props.changeWeek(props.week - 1)
+      dispatch(decrementWeek())
     }
   }
 
@@ -77,18 +67,18 @@ export default function Header(props) {
 
       <div className="header-section weekDisplay">
         <div>
-        {props.week !== 1 && <button className="week-button" onClick={() => handleWeekChange("down")}><i className="fas fa-angle-left"></i></button>}
+        {week !== 1 && <button className="week-button" onClick={() => handleWeekChange("down")}><i className="fas fa-angle-left"></i></button>}
         </div>
         <div>
-          Week {props.week}
+          Week {week}
         </div>
         <div>
-        {props.week !== 52 && <button className="week-button" onClick={() => handleWeekChange("up")}><i className="fas fa-angle-right"></i></button>}
+        {week !== 52 && <button className="week-button" onClick={() => handleWeekChange("up")}><i className="fas fa-angle-right"></i></button>}
         </div>
       </div>
 
       <div className="header-section downloadCSV">
-        {props.driver.name && <p className="first">{props.driver.name}'s schedule per</p>}
+        {driver.name && <p className="first">{driver.name}'s schedule per</p>}
         <div className="second">
           <FormControl className={classes.formControl}>
             <InputLabel id="demo-simple-select-label"># of days</InputLabel>
@@ -111,3 +101,12 @@ export default function Header(props) {
     </div>
   )
 }
+
+const ConnectedHeader = connect((state) => {
+  return {
+    driver: state.driver,
+    week: state.week
+  }
+})(Header)
+
+export default ConnectedHeader;
