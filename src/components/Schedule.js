@@ -20,7 +20,7 @@ function Schedule(props) {
       <div className="grid">
         
         {/* ROW HEADER: TIME */}
-        {/* For an array of 0 to 23 hours, we create a name for each row header in the calendar grid */}
+        {/* For an array of 0 to 24 hours, we create a name for each row header in the calendar grid */}
         {[...Array(25)].map((e,i) => {
           if (i < 10) {
             i = "0" + i
@@ -37,8 +37,7 @@ function Schedule(props) {
         })}
 
         {/* DAYS/TASKS */}
-        {/* For every day in days state, assign a Day component: */}
-        {/* We filter tasks by the day they belong to */}
+        {/* For every task in tasks state, assign a Task component: */}
         {props.filteredTasks.map((task) => {
           return(
             <Task
@@ -63,9 +62,9 @@ function Schedule(props) {
   )
 }
 
-const ConnectedSchedule = connect((state) => {
+const ConnectedSchedule = connect(({tasks, driver, week}) => {
   return {
-    filteredTasks: getVisibleTasks(state.tasks, state.driver, state.week)
+    filteredTasks: getVisibleTasks(tasks, driver, week)
   }
 })(Schedule);
 

@@ -58,5 +58,3 @@ export function convertDayNumberToName(dayNumber) {
   const numberInArray = (dayNumber % 7) - 1 
   return dayNames[numberInArray]
 }
-
-export default { convertToClockTime, getDayRangeByWeek, convertDayNumberToName };

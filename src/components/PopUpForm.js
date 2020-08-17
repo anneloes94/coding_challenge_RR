@@ -1,36 +1,11 @@
-// In ADD mode, we have access to:
-// - driver state
-// - week state
-// - setWeek
-// - mode
-
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { connect } from "react-redux"
 import { TextField, Modal, Backdrop, Fade, MenuItem, Button } from "@material-ui/core";
-import convertToClockTime from "../helpers/convertors";
+import { convertToClockTime } from "../helpers/convertors";
 import "./PopUpForm.css"
-
-// Options for task type
-  //  #TODO => refactor into global variable
-const tasks = ["pickup", "dropoff", "other"]
-const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
-
-// Creates time array: [0000, ..., 2300]
-  // #TODO => refactor  
-let times = [];
-const createTimes = () => {
-  [...Array(25)].map((e,i) => {
-    let time;
-    if (i < 10) {
-      time = "0" + i;
-    } else {
-      time = i;
-    }
-    time += "00"
-    times.push(time);
-  })
-}
-createTimes()
+import { dayNames, tasks, times } from "../variables";
+import {setWeek} from "../actions/week"
 
 // Material UI styles
 const useStyles = makeStyles((theme) => ({
@@ -54,14 +29,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 // ***
 
-export default function PopUpForm(props) {
+function PopUpForm({dispatch, open, handleClose, mode, driver, week}) {
   const classes = useStyles();
 
   // State for form data
   const [task, setTask] = useState(tasks[0]);
   const [startTime, setStartTime] = useState("1200");
   const [endTime, setEndTime] = useState("1300");
-  const [day, setDay] = useState(days[0])
+  const [day, setDay] = useState(dayNames[0])
   const [errors, setError] = useState([])
   const [warning, showWarning] = useState(false)
 
@@ -72,10 +47,11 @@ export default function PopUpForm(props) {
       !errors.includes("invalidWeek") && setError(errors => [...errors, "invalidWeek"])
     } else {
       setError(errors.filter(error => error !== "invalidWeek"))
-      props.setStateWeek(event.target.value)
+      dispatch(setWeek(event.target.value))
     }
   }
 
+  // REFACTOR
   const handleDayChange = (event) => {
     setDay(event.target.value);
   }
@@ -87,6 +63,7 @@ export default function PopUpForm(props) {
   const handleStartingTimeChange = (event) => {
     setStartTime(event.target.value);
   };
+  // ---
 
   const handleEndTimeChange = (event) => {
     if (Number(startTime) >= Number(event.target.value)) {
@@ -99,15 +76,15 @@ export default function PopUpForm(props) {
 
   const checkFormData = () => {
     // check whether there are no errors in form and driver is set
-    if (errors.length === 0 && props.driver.name) {
+    if (errors.length === 0 && driver.name) {
       showWarning(false)
       
       // convert week/weekday to dayNumber (for days state)
-      const dayInWeek = days.indexOf(day) + 1
-      const formDayNumber = (props.week - 1) * 7 + dayInWeek
+      const dayInWeek = dayNames.indexOf(day) + 1
+      const formDayNumber = (week - 1) * 7 + dayInWeek
       
       // we now have all variables - call submitFormData
-      submitFormData(props.driver.id, day, formDayNumber, task, startTime, endTime)
+      submitFormData(driver.id, day, formDayNumber, task, startTime, endTime)
     } else {
       console.log("booo")
       showWarning(true)
@@ -115,25 +92,15 @@ export default function PopUpForm(props) {
   }
   
   const submitFormData = (driverID, dayName, dayNumber, taskName, startTime, endTime) => {
-    let lastTask = props.allTasks[props.allTasks.length - 1];
-    let newTaskID = lastTask.id + 1
     // check if days state already has this day (dayNumber) stored
-    props.allDays.map(day => {
-      if (day.id !== dayNumber) {
-        props.handleDaysState({
-          id: dayNumber,
-          name: dayName,
-          tasks: [newTaskID]
-        });
-        props.handleTasksState({
-          id: newTaskID,
-          title: taskName,
-          driver: driverID,
-          start_time: startTime,
-          end_time: endTime
-        });
-      }
-    })
+
+    // handleTasksState({
+    //   id: newTaskID,
+    //   title: taskName,
+    //   driver: driverID,
+    //   start_time: startTime,
+    //   end_time: endTime
+    // });
     
     // else: add new day and add task
     
@@ -148,15 +115,15 @@ export default function PopUpForm(props) {
       aria-labelledby="transition-modal-title"
       aria-describedby="transition-modal-description"
       className={classes.modal}
-      open={props.open}
-      onClose={() => props.handleClose()}
+      open={open}
+      onClose={() => handleClose()}
       closeAfterTransition
       BackdropComponent={Backdrop}
       BackdropProps={{
         timeout: 500,
       }}
     >
-      <Fade in={props.open}>
+      <Fade in={open}>
         <div className={classes.paper} id="form" >
           {warning && 
             <div class="warning">
@@ -164,14 +131,14 @@ export default function PopUpForm(props) {
             </div>
           }
           <form className={classes.root} noValidate autoComplete="off">
-            <h2 className="form-element" >{props.mode} a task</h2>
+            <h2 className="form-element" >{mode} a task</h2>
             <div>
               <TextField
-                error={!props.driver.name}
+                error={!driver.name}
                 disabled
                 id="trucker"
                 label="Trucker"
-                defaultValue={props.driver.name}
+                defaultValue={driver.name}
                 variant="filled"
               />
 
@@ -180,7 +147,7 @@ export default function PopUpForm(props) {
                 required
                 id="week"
                 label={"Week #"}
-                defaultValue={props.week}
+                defaultValue={week}
                 helperText="Enter a week between 1 - 52"
                 variant="outlined"
                 onChange={handleWeekChange}
@@ -195,7 +162,7 @@ export default function PopUpForm(props) {
                 helperText="Select a day"
                 onChange={handleDayChange}
               >
-                {days.map(day => (
+                {dayNames.map(day => (
                   <MenuItem key={day} value={day} style={{textTransform:"capitalize"}}>
                     {day}
                   </MenuItem>
@@ -252,7 +219,7 @@ export default function PopUpForm(props) {
               </TextField>
               <div className="button-wrapper">
                 <Button onClick={checkFormData} variant="outlined" color="primary">
-                  {props.mode} Task
+                  {mode} Task
                 </Button>
               </div>
             </div>
@@ -264,3 +231,12 @@ export default function PopUpForm(props) {
     </Modal>
   );
 }
+
+const mapStateToProps = (({tasks, driver, week}) => {
+  return {
+    driver,
+    week
+  }
+});
+
+export default connect(mapStateToProps)(PopUpForm);

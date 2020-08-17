@@ -1,6 +1,7 @@
 import React from "react";
+import { connect } from "react-redux"
 import { convertToClockTime, convertDayNumberToName } from "../helpers/convertors"
-import "./Task.css"
+import "./Task.css";
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -10,7 +11,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
-export default function Task({id, title, driver, day, startTime, endTime}) {
+function Task({dispatch, id, title, driver, day, startTime, endTime}) {
   // Material UI functions & state
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -71,3 +72,13 @@ export default function Task({id, title, driver, day, startTime, endTime}) {
     </div>
   )
 }
+
+const mapStateToProps = ({tasks, driver, week}) => {
+  return {
+    tasks,
+    driver,
+    week
+  }
+}
+
+export default connect()(Task);
