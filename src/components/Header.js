@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { connect } from "react-redux"
 import { InputLabel, MenuItem, FormControl, Select, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles'
-import {drivers, dayPeriods} from "../variables"
+import { drivers, dayPeriods } from "../variables"
 import "./Header.css"
 import setDriver from "../actions/driver"
 import { incrementWeek, decrementWeek } from '../actions/week';
+import { convertToCSV } from "../helpers/convertors"
 
 // Material-UI styles
 const useStyles = makeStyles((theme) => ({
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Header({dispatch, driver, week}) {
+function Header({dispatch, driver, week, tasks}) {
   const classes = useStyles();
 
   const menuItems = drivers.map((driver, index) => <MenuItem key={index} value={driver.id}>{driver.name}</MenuItem>)
@@ -45,7 +46,9 @@ function Header({dispatch, driver, week}) {
   }
 
   const handleDayPeriodChange = (event) => {
-    // getCSV(event.target.value)
+    const dayPeriod = event.target.value
+    const driverTasks = tasks.filter(task => task.driver === driver.id)
+    convertToCSV(driverTasks, dayPeriod)
   }
 
   return(
@@ -105,7 +108,8 @@ function Header({dispatch, driver, week}) {
 const ConnectedHeader = connect((state) => {
   return {
     driver: state.driver,
-    week: state.week
+    week: state.week,
+    tasks: state.tasks
   }
 })(Header)
 

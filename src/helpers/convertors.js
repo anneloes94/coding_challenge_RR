@@ -58,3 +58,42 @@ export function convertDayNumberToName(dayNumber) {
   const numberInArray = (dayNumber % 7) - 1 
   return dayNames[numberInArray]
 }
+
+export function convertToCSV(tasks, dayInterval) {
+  let allCSV = [["Time Frame", "Pickup", "Dropoff", "Other"]]
+  let counter = 1;
+  let firstDay = 1
+  let lastDay = dayInterval
+  let dropoff = 0
+  let pickup = 0
+  let other = 0
+
+  while (lastDay < 52) {
+    let dayIntervalTasks = tasks.filter(task => task.day >= firstDay && task.day <= lastDay)
+  
+    if (counter <= lastDay) {
+      dayIntervalTasks.forEach(task => {
+        if (task.day === counter) {
+          switch (task.title) {
+            case "pickup":
+              dropoff++
+            case "dropoff":
+              dropoff++
+            case "other":
+              other++
+          }
+        }
+      })
+      counter++
+    } else {
+      allCSV.push([`Day ${firstDay} - ${lastDay}`, pickup, dropoff, other])
+      dropoff = 0
+      pickup = 0
+      other = 0
+      firstDay = lastDay + 1
+      lastDay = firstDay + dayInterval - 1
+    }
+  }
+  console.log(allCSV)
+  return allCSV
+}
