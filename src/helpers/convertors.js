@@ -58,3 +58,29 @@ export function convertDayNumberToName(dayNumber) {
   const numberInArray = (dayNumber % 7) - 1 
   return dayNames[numberInArray]
 }
+
+export function convertToCSV(tasks, dayInterval) {
+  let allCSV = [["Time Frame", "Pickup", "Dropoff", "Other"]]
+  const numberOfRows = Math.ceil(52 * 7 / dayInterval)
+  for (let rowNumber = 1; rowNumber < numberOfRows + 1; rowNumber++) {
+    let firstDay = rowNumber * dayInterval - (dayInterval - 1)
+    let lastDay = rowNumber * dayInterval
+    allCSV.push([`Day ${firstDay} - ${lastDay}`, 0, 0, 0])
+  }
+
+  tasks.forEach(task => {
+    let belongingRowNumber = Math.ceil(task.day / dayInterval)
+    switch (task.title) {
+      case "pickup":
+        allCSV[belongingRowNumber][1]++
+        break;
+      case "dropoff":
+        allCSV[belongingRowNumber][2]++
+        break;
+      case "other":
+        allCSV[belongingRowNumber][3]++
+        break;
+    }
+  })
+  return allCSV
+}

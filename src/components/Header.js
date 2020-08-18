@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { connect } from "react-redux"
+import { connect } from "react-redux";
 import { InputLabel, MenuItem, FormControl, Select, Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles'
-import {drivers, dayPeriods} from "../variables"
-import "./Header.css"
-import setDriver from "../actions/driver"
+import { makeStyles } from '@material-ui/core/styles';
+import { drivers, dayPeriods } from "../variables";
+import "./Header.css";
+import setDriver from "../actions/driver";
 import { incrementWeek, decrementWeek } from '../actions/week';
+import { convertToCSV } from "../helpers/convertors"
+import { CSVLink } from "react-csv";
 
 // Material-UI styles
 const useStyles = makeStyles((theme) => ({
@@ -23,12 +25,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Header({dispatch, driver, week}) {
+function Header({dispatch, driver, week, tasks}) {
   const classes = useStyles();
 
   const menuItems = drivers.map((driver, index) => <MenuItem key={index} value={driver.id}>{driver.name}</MenuItem>)
   const dayPeriodItems = dayPeriods.map((driver, index) => <MenuItem key={index} value={driver}>{driver} days</MenuItem>)
   const [hasNoEntry, setEntry] = useState(true)
+  const [dayInterval, setDayInterval] = useState(undefined)
+  const [CSVData, setCSVData] = useState([])
 
   const handleDriverChange = (event) => {
     let newDriverObject = drivers.filter(driver => driver.id === event.target.value)
@@ -45,7 +49,12 @@ function Header({dispatch, driver, week}) {
   }
 
   const handleDayPeriodChange = (event) => {
-    // getCSV(event.target.value)
+    setDayInterval(event.target.value)
+  }
+  
+  const handleCSVbutton = () => {
+    const driverTasks = tasks.filter(task => task.driver === driver.id)
+    setCSVData(convertToCSV(driverTasks, dayInterval))
   }
 
   return(
@@ -57,7 +66,6 @@ function Header({dispatch, driver, week}) {
             error={hasNoEntry}
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            // value={props.driver || ""}
             onChange={handleDriverChange}
           >
             {menuItems}
@@ -92,8 +100,14 @@ function Header({dispatch, driver, week}) {
           </FormControl>
         </div>
         <div className="third">
-          <Button variant="outlined" color="primary">
-            CSV <i className="fa fa-download" aria-hidden="true"></i>
+          <Button onClick={handleCSVbutton} variant="outlined" color="primary">
+            <CSVLink 
+              data={CSVData}
+              filename={"driver-schedule.csv"}
+              target="_blank"
+            >
+              CSV <i className="fa fa-download" aria-hidden="true"></i>
+            </CSVLink>
           </Button>
         </div>
 
@@ -105,7 +119,8 @@ function Header({dispatch, driver, week}) {
 const ConnectedHeader = connect((state) => {
   return {
     driver: state.driver,
-    week: state.week
+    week: state.week,
+    tasks: state.tasks
   }
 })(Header)
 
