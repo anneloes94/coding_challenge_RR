@@ -41,3 +41,7 @@
   font-weight: 800;
   color: #5a7be4;
 }
+
+.third a {
+  text-decoration:none; 
+}

@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { connect } from "react-redux"
+import { connect } from "react-redux";
 import { InputLabel, MenuItem, FormControl, Select, Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles'
-import { drivers, dayPeriods } from "../variables"
-import "./Header.css"
-import setDriver from "../actions/driver"
+import { makeStyles } from '@material-ui/core/styles';
+import { drivers, dayPeriods } from "../variables";
+import "./Header.css";
+import setDriver from "../actions/driver";
 import { incrementWeek, decrementWeek } from '../actions/week';
 import { convertToCSV } from "../helpers/convertors"
+import { CSVLink } from "react-csv";
 
 // Material-UI styles
 const useStyles = makeStyles((theme) => ({
@@ -30,6 +31,8 @@ function Header({dispatch, driver, week, tasks}) {
   const menuItems = drivers.map((driver, index) => <MenuItem key={index} value={driver.id}>{driver.name}</MenuItem>)
   const dayPeriodItems = dayPeriods.map((driver, index) => <MenuItem key={index} value={driver}>{driver} days</MenuItem>)
   const [hasNoEntry, setEntry] = useState(true)
+  const [dayInterval, setDayInterval] = useState(undefined)
+  const [CSVData, setCSVData] = useState([])
 
   const handleDriverChange = (event) => {
     let newDriverObject = drivers.filter(driver => driver.id === event.target.value)
@@ -46,9 +49,12 @@ function Header({dispatch, driver, week, tasks}) {
   }
 
   const handleDayPeriodChange = (event) => {
-    const dayPeriod = event.target.value
+    setDayInterval(event.target.value)
+  }
+  
+  const handleCSVbutton = () => {
     const driverTasks = tasks.filter(task => task.driver === driver.id)
-    convertToCSV(driverTasks, dayPeriod)
+    setCSVData(convertToCSV(driverTasks, dayInterval))
   }
 
   return(
@@ -95,8 +101,14 @@ function Header({dispatch, driver, week, tasks}) {
           </FormControl>
         </div>
         <div className="third">
-          <Button variant="outlined" color="primary">
-            CSV <i className="fa fa-download" aria-hidden="true"></i>
+          <Button onClick={handleCSVbutton} variant="outlined" color="primary">
+            <CSVLink 
+              data={CSVData}
+              filename={"driver-schedule.csv"}
+              target="_blank"
+            >
+              CSV <i className="fa fa-download" aria-hidden="true"></i>
+            </CSVLink>
           </Button>
         </div>
 
