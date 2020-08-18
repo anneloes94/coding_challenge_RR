@@ -66,7 +66,6 @@ function Header({dispatch, driver, week, tasks}) {
             error={hasNoEntry}
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            // value={props.driver || ""}
             onChange={handleDriverChange}
           >
             {menuItems}

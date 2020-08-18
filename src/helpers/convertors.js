@@ -61,41 +61,26 @@ export function convertDayNumberToName(dayNumber) {
 
 export function convertToCSV(tasks, dayInterval) {
   let allCSV = [["Time Frame", "Pickup", "Dropoff", "Other"]]
-  let counter = 1;
-  let firstDay = 1
-  let lastDay = dayInterval
-  let dropoff = 0
-  let pickup = 0
-  let other = 0
-
-  while (lastDay < 53) {
-    let dayIntervalTasks = tasks.filter(task => task.day >= firstDay && task.day <= lastDay)
-  
-    if (counter <= lastDay) {
-      dayIntervalTasks.forEach(task => {
-        if (task.day === counter) {
-          switch (task.title) {
-            case "pickup":
-              dropoff++
-            case "dropoff":
-              dropoff++
-            case "other":
-              other++
-          }
-        }
-      })
-      counter++
-    } else {
-      allCSV.push([`Day ${firstDay} - ${lastDay}`, pickup, dropoff, other])
-      dropoff = 0
-      pickup = 0
-      other = 0
-      firstDay = lastDay + 1
-      // if the last calculated day is higher than 52, just make it 52
-      let lastCalculatedDay = firstDay + dayInterval - 1
-      lastCalculatedDay > 52 ? lastDay = 52 : lastDay = lastCalculatedDay
-    }
+  const numberOfRows = Math.ceil(52 * 7 / dayInterval)
+  for (let rowNumber = 1; rowNumber < numberOfRows + 1; rowNumber++) {
+    let firstDay = rowNumber * dayInterval - (dayInterval - 1)
+    let lastDay = rowNumber * dayInterval
+    allCSV.push([`Day ${firstDay} - ${lastDay}`, 0, 0, 0])
   }
-  console.log(allCSV)
+
+  tasks.forEach(task => {
+    let belongingRowNumber = Math.ceil(task.day / dayInterval)
+    switch (task.title) {
+      case "pickup":
+        allCSV[belongingRowNumber][1]++
+        break;
+      case "dropoff":
+        allCSV[belongingRowNumber][2]++
+        break;
+      case "other":
+        allCSV[belongingRowNumber][3]++
+        break;
+    }
+  })
   return allCSV
 }
