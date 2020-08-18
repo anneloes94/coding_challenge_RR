@@ -68,7 +68,7 @@ export function convertToCSV(tasks, dayInterval) {
   let pickup = 0
   let other = 0
 
-  while (lastDay < 52) {
+  while (lastDay < 53) {
     let dayIntervalTasks = tasks.filter(task => task.day >= firstDay && task.day <= lastDay)
   
     if (counter <= lastDay) {
@@ -91,7 +91,9 @@ export function convertToCSV(tasks, dayInterval) {
       pickup = 0
       other = 0
       firstDay = lastDay + 1
-      lastDay = firstDay + dayInterval - 1
+      // if the last calculated day is higher than 52, just make it 52
+      let lastCalculatedDay = firstDay + dayInterval - 1
+      lastCalculatedDay > 52 ? lastDay = 52 : lastDay = lastCalculatedDay
     }
   }
   console.log(allCSV)
